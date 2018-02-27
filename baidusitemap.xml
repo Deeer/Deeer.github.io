@@ -4,8 +4,28 @@
 
     
   <url>
+    <loc>http://deeer.github.io/2015/12/31/2015%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/</loc>
+    <lastmod>2018-02-27T14:51:14.000Z</lastmod>
+    <data>
+        <display>
+        <title>2015年度总结</title>
+        <pubTime>2015-12-31T14:45:53.000Z</pubTime>
+        
+        <tag>年度总结</tag>
+         
+         
+           
+             
+              <breadCrumb title="年度总结" url="http://deeer.github.io/categories/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://deeer.github.io/2017/12/10/2017%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/</loc>
-    <lastmod>2017-12-10T06:47:55.000Z</lastmod>
+    <lastmod>2018-02-27T14:50:54.000Z</lastmod>
     <data>
         <display>
         <title>2017年度总结</title>
@@ -15,6 +35,9 @@
          
          
            
+             
+              <breadCrumb title="年度总结" url="http://deeer.github.io/categories/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/"/>
+          
         </display>
     </data>
     </url>
@@ -22,7 +45,7 @@
     
   <url>
     <loc>http://deeer.github.io/2016/12/24/2016%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/</loc>
-    <lastmod>2016-12-31T16:08:23.000Z</lastmod>
+    <lastmod>2018-02-27T14:50:41.000Z</lastmod>
     <data>
         <display>
         <title>2016年度总结及17年展望</title>
@@ -33,33 +56,13 @@
          
            
              
-              <breadCrumb title="2016" url="http://deeer.github.io/categories/2016/"/>
+              <breadCrumb title="年度总结" url="http://deeer.github.io/categories/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/"/>
           
         </display>
     </data>
     </url>
 
     
-    
-  <url>
-    <loc>http://deeer.github.io/2015/12/31/2015%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/</loc>
-    <lastmod>2016-01-03T13:45:03.000Z</lastmod>
-    <data>
-        <display>
-        <title>年度总结</title>
-        <pubTime>2015-12-31T14:45:53.000Z</pubTime>
-        
-        <tag>年度总结</tag>
-         
-         
-           
-             
-              <breadCrumb title="iOS" url="http://deeer.github.io/categories/iOS/"/>
-          
-        </display>
-    </data>
-    </url>
-
     
     
 </urlset>
