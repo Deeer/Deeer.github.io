@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deeer.github.io/"/>
-  <updated>2018-02-27T15:15:02.000Z</updated>
+  <updated>2018-02-27T15:51:38.000Z</updated>
   <id>http://deeer.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>《白话区块链》读书笔记</title>
+    <link href="http://deeer.github.io/2018/02/27/%E3%80%8A%E7%99%BD%E8%AF%9D%E5%8C%BA%E5%9D%97%E9%93%BE%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    <id>http://deeer.github.io/2018/02/27/《白话区块链》读书笔记/</id>
+    <published>2018-02-27T15:23:18.000Z</published>
+    <updated>2018-02-27T15:51:38.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p><strong>前言：</strong> 这本书用比较形象的例子阐述了区块链，并从中逐步引申出区块链中的相关概念。值得一读，推荐！</p></blockquote><p>###节点<br>区块链中的客户端，我们可以理解为各个用户的电子钱包</p><p>###一个故事<br>在有些系统中，就考虑到被掷骰子投中的节点的劳动付出（即记账，然后向全体广播），毕竟整理数据、验证数据、打包数据、还要广而告之。于是设计出一种激励机制，负责打包数据的那个节点可以获得系统的奖励，这个奖励类似于论坛积分，站在软件技术的角度，就是一个数据。这个数据被视为<strong>奖金</strong>，大家会很积极去争取那个奖金，于是就希望骰子能投中自己，有些区块链系统在这个环节会设计出一种带有竞争的机制，让各个节点去抢，谁能抢到这个机会，谁就能获得大包数据的权利并同时获得这笔奖励，这种情况下，我们会很形象的将这个竞争过程称为<strong>挖坑</strong></p><p>###公钥私钥<br>用公钥加密的数据必须使用对应的私钥来解密，而用私钥加密的（通常称为签名）的数据必须用对应的公钥来解密。公钥私钥的加密方式在区块链中称为<strong>脚本系统</strong></p><p>###真实性<br>区块链账本对每个区块都会计算出一个哈希值，称为区块哈希。通过区块哈希值来串连区块。这样的好处就是，如果有人篡改了中间的某个区块数据，那么后面的区块都要进行修改，这个时候并不是简单的修改一下后面区块的地址指向就能结束的，由于后面的区块是通过区块哈希来指向的，只要前面的区块发生了变化，这个区块哈希就无效了，就指不到正确的区块了</p><p>除了整个区块会被计算哈希外，区块中包含的每一笔事物数据也会被计算出一个哈希值，称为<strong>事物哈希</strong>。每个事物哈希都代表一个事物</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;前言：&lt;/strong&gt; 这本书用比较形象的例子阐述了区块链，并从中逐步引申出区块链中的相关概念。值得一读，推荐！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;###节点&lt;br&gt;区块链中的客户端，我们可以理解为各个用户的电子钱包&lt;/p
+      
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://deeer.github.io/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="BTC" scheme="http://deeer.github.io/tags/BTC/"/>
+    
+  </entry>
   
   <entry>
     <title>整理说明</title>
