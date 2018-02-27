@@ -91,4 +91,30 @@
     
   </entry>
   
+  <entry>
+    <title>new</title>
+    <link href="http://deeer.github.io/2015/06/01/new/"/>
+    <id>http://deeer.github.io/2015/06/01/new/</id>
+    <published>2015-05-31T18:26:59.000Z</published>
+    <updated>2018-02-27T14:53:25.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>记于：2015年6月1日凌晨2：30. 自己做的第一个博客，六一快乐！！！</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;记于：2015年6月1日凌晨2：30. 自己做的第一个博客，六一快乐！！！&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+      <category term="LIFE" scheme="http://deeer.github.io/categories/LIFE/"/>
+    
+    
+      <category term="LIFE" scheme="http://deeer.github.io/tags/LIFE/"/>
+    
+  </entry>
+  
 </feed>
