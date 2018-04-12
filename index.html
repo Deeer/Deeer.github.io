@@ -138,6 +138,91 @@
           
           
             
+              <a class="post-title-link" href="/2018/04/12/autoreleasepool分析/">
+                autoreleasepool分析
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2018-04-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/ScourceCode/">ScourceCode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2018/04/12/autoreleasepool分析/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/12/autoreleasepool分析/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Autorelease pool implementation</span><br><span class="line">A thread's autorelease pool is a stack of pointers. </span><br><span class="line">Each pointer is either an object to <span class="keyword">release</span>, <span class="keyword">or</span> POOL_SENTINEL which <span class="keyword">is</span> </span><br><span class="line"> an autorelease pool boundary.</span><br><span class="line">A pool token <span class="keyword">is</span> a pointer <span class="keyword">to</span> the POOL_SENTINEL <span class="keyword">for</span> that pool. <span class="keyword">When</span> </span><br><span class="line"> the pool <span class="keyword">is</span> popped, every <span class="keyword">object</span> hotter <span class="keyword">than</span> the sentinel <span class="keyword">is</span> released.</span><br><span class="line">The stack <span class="keyword">is</span> divided <span class="keyword">into</span> a doubly-linked <span class="keyword">list</span> <span class="keyword">of</span> pages. Pages <span class="keyword">are</span> added </span><br><span class="line"> <span class="keyword">and</span> deleted <span class="keyword">as</span> necessary. </span><br><span class="line"><span class="keyword">Thread</span>-<span class="keyword">local</span> <span class="keyword">storage</span> points <span class="keyword">to</span> the hot page, <span class="keyword">where</span> newly autoreleased objects <span class="keyword">are</span> stored.</span><br></pre></td></tr></table></figure>
+<p>翻译：<br>一个线程的自动释放池是一堆指针。指针要么是一个<code>release</code>对象，要么是一个<code>POOL_SENTINEL</code> — <code>POOL_SENTINEL</code>是一个自动回收池边界</p>
+<p>一个<code>pool token</code>对于那个释放池来讲是一个指向<code>POOL_SENTINEL</code>(池子哨兵)的指针。当池子被释放时，没个比哨兵hotter的对象都要被释放–不是很懂。这个栈被划分为一系列双向列表，列表根据需要添加或者删除</p>
+<p>TLS指证指向<code>hot page</code>，他就是最新的自动释放对对象存储的地方</p>
+<h2 id=""><a href="#" class="headerlink" title="  "></a>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/04/12/autoreleasepool分析/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2018/02/27/《白话区块链》读书笔记/">
                 《白话区块链》读书笔记
               </a>
@@ -442,88 +527,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/12/31/2015年度总结/">
-                2015年度总结
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2015-12-31
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/年度总结/">年度总结</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/12/31/2015年度总结/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/31/2015年度总结/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h1 id="时光飞逝"><a href="#时光飞逝" class="headerlink" title="时光飞逝"></a>时光飞逝</h1><p>－－－记得上个年末时节，还在打算着用一年的时间来做一件事。但是一直想不到去做些什么。但是想不到后来会忙成这样。大四的上半学期，也就是15年的年末，开始走出校园，走向社会开始工作。又是一个新的开始的，新的起点，新的环境。在我投身工作的几个月里，时间真的非常快。每天都会有问题，每天都在想着尝试着解决问题。每天的最不爽的就是早上上班时候，说实话，睡眠时间真不够，有时甚至为了赶进度一天要工作近21个小时。3个小时的睡眠时间是个奢侈的享受。没办法，第二天还要工作，还是稍微会睡儿。在公交上也容易睡着，迷迷糊糊到公司，结果我还是第一个到的。公司离学校也不远，但是强迫症总觉得迟到不好，也许是在校时培养的习惯吧。所以一半都会提前半个小时到公司，只可惜电脑反应实在太慢，开机要好久。。。心好累😂。现在还只是一只小猴子，也算是初步走上了自己预想的轨迹吧。</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/12/31/2015年度总结/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -562,21 +565,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">10</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

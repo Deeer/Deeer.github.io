@@ -1,0 +1,597 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="代码手工艺人 | Love Linux  | 追求体验" />
+
+
+
+  <meta name="keywords" content="autoreleasepool," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Dee+'s Blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      baidu: '',
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> autoreleasepool分析 // Dee+'s Blog </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Dee+'s Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          Home
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          Categories
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          Archives
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          Tags
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-about">
+        <a href="/about">
+          <i class="menu-item-icon icon-about"></i> <br />
+          About
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              autoreleasepool分析
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2018-04-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/ScourceCode/">ScourceCode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2018/04/12/autoreleasepool分析/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/12/autoreleasepool分析/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Autorelease pool implementation</span><br><span class="line">A thread's autorelease pool is a stack of pointers. </span><br><span class="line">Each pointer is either an object to <span class="keyword">release</span>, <span class="keyword">or</span> POOL_SENTINEL which <span class="keyword">is</span> </span><br><span class="line"> an autorelease pool boundary.</span><br><span class="line">A pool token <span class="keyword">is</span> a pointer <span class="keyword">to</span> the POOL_SENTINEL <span class="keyword">for</span> that pool. <span class="keyword">When</span> </span><br><span class="line"> the pool <span class="keyword">is</span> popped, every <span class="keyword">object</span> hotter <span class="keyword">than</span> the sentinel <span class="keyword">is</span> released.</span><br><span class="line">The stack <span class="keyword">is</span> divided <span class="keyword">into</span> a doubly-linked <span class="keyword">list</span> <span class="keyword">of</span> pages. Pages <span class="keyword">are</span> added </span><br><span class="line"> <span class="keyword">and</span> deleted <span class="keyword">as</span> necessary. </span><br><span class="line"><span class="keyword">Thread</span>-<span class="keyword">local</span> <span class="keyword">storage</span> points <span class="keyword">to</span> the hot page, <span class="keyword">where</span> newly autoreleased objects <span class="keyword">are</span> stored.</span><br></pre></td></tr></table></figure>
+<p>翻译：<br>一个线程的自动释放池是一堆指针。指针要么是一个<code>release</code>对象，要么是一个<code>POOL_SENTINEL</code> — <code>POOL_SENTINEL</code>是一个自动回收池边界</p>
+<p>一个<code>pool token</code>对于那个释放池来讲是一个指向<code>POOL_SENTINEL</code>(池子哨兵)的指针。当池子被释放时，没个比哨兵hotter的对象都要被释放–不是很懂。这个栈被划分为一系列双向列表，列表根据需要添加或者删除</p>
+<p>TLS指证指向<code>hot page</code>，他就是最新的自动释放对对象存储的地方</p>
+<h2 id=""><a href="#" class="headerlink" title="  "></a> <a id="more"></a> </h2><p>反编译<code>main.m</code>文件之后的部分代码</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> __AtAutoreleasePool &#123;</span><br><span class="line">  __AtAutoreleasePool() &#123;atautoreleasepoolobj = objc_autoreleasePoolPush();&#125;</span><br><span class="line">  ~__AtAutoreleasePool() &#123;objc_autoreleasePoolPop(atautoreleasepoolobj);&#125;</span><br><span class="line">  <span class="keyword">void</span> * atautoreleasepoolobj;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[]) &#123;</span><br><span class="line">    <span class="comment">/* @autoreleasepool */</span> &#123; __AtAutoreleasePool __autoreleasepool; </span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">UIApplicationMain</span>(argc, argv, __null, <span class="built_in">NSStringFromClass</span>(((Class (*)(<span class="keyword">id</span>, SEL))(<span class="keyword">void</span> *)objc_msgSend)((<span class="keyword">id</span>)objc_getClass(<span class="string">"AppDelegate"</span>), sel_registerName(<span class="string">"class"</span>))));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在cpp文件中我们可以找到<code>__AtAutoreleasePool</code>的定义，他是一个结构体，在构造函数<code>__AtAutoreleasePool()</code>中调用了<code>objc_autoreleasePoolPush()</code>方法并返回了<code>atautoreleasepoolobj</code>这个释放池对象。在析构函数<code>~__AtAutoreleasePool()</code>中调用了<code>objc_autoreleasePoolPop()</code>方法</p>
+<p>在这里我们可以想到，在main函数中当我们每声明一个<code>__AtAutoreleasePool</code>的时候,都会<br>调用构造函数<code>objc_autoreleasePoolPush</code> （因为他是结构体）向堆栈内压入一个释放池对象，而main执行完毕的时候会调用析构函数，这时候会用将压入的释放池释放，</p>
+<p><strong>所以</strong></p>
+<p>在<code>main</code>函数中大致是这样<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    <span class="comment">/* @autoreleasepool */</span> &#123;</span><br><span class="line">        <span class="comment">//创建自动释放池</span></span><br><span class="line">        __AtAutoreleasePool __autoreleasepool = objc_autoreleasePoolPush();</span><br><span class="line">        <span class="comment">//TODO 执行各种操作，将对象加入自动释放池</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//释放自动释放池</span></span><br><span class="line">        objc_autoreleasePoolPop(__autoreleasepool)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>到这里我们就可以理解为什么我们需要自己使用<code>autorelasepool block</code>去处理一些代码，因为我们不能保证默认的<code>autoreleasepool</code>的释放周期，所以我们需要在小范围内进行<code>autorelease</code></p>
+<h2 id="Push部分"><a href="#Push部分" class="headerlink" title="Push部分"></a>Push部分</h2><p>接下来，我们来看一下<code>objc_autoreleasePoolPush()</code>和<code>objc_autoreleasePoolPop()</code>方法，<a href="https://opensource.apple.com/source/objc4/objc4-532/runtime/NSObject.mm.auto.html" target="_blank" rel="noopener">在这里苹果官方的源码里</a>找到里对应的实现</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> * <span class="title">objc_autoreleasePoolPush</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (UseGC) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> AutoreleasePoolPage::push();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">objc_autoreleasePoolPop</span><span class="params">(<span class="keyword">void</span> *ctxt)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (UseGC) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// fixme rdar://9167170</span></span><br><span class="line">    <span class="keyword">if</span> (!ctxt) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    AutoreleasePoolPage::pop(ctxt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们能找到<code>AutoreleasePoolPage</code>才是实现的关键，那么我们接下来看看<code>AutoreleasePoolPage</code>的具体实现方式</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Set this to 1 to mprotect() autorelease pool contents</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PROTECT_AUTORELEASEPOOL 0</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AutoreleasePoolPage</span> </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> POOL_SENTINEL 0</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">pthread_key_t</span> <span class="keyword">const</span> key = AUTORELEASE_POOL_KEY;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">uint8_t</span> <span class="keyword">const</span> SCRIBBLE = <span class="number">0xA3</span>;  <span class="comment">// 0xA3A3A3A3 after releasing</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">size_t</span> <span class="keyword">const</span> SIZE = </span><br><span class="line">#<span class="keyword">if</span> PROTECT_AUTORELEASEPOOL</span><br><span class="line">        <span class="number">4096</span>;  <span class="comment">// must be multiple of vm page size</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">        <span class="number">4096</span>;  <span class="comment">// size and alignment, power of 2</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">size_t</span> <span class="keyword">const</span> COUNT = SIZE / <span class="keyword">sizeof</span>(id);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">magic_t</span> <span class="keyword">const</span> magic; <span class="comment">//用于数据校验</span></span><br><span class="line">    id *next; <span class="comment">//栈顶地址</span></span><br><span class="line">    <span class="keyword">pthread_t</span> <span class="keyword">const</span> thread; <span class="comment">//所在线程</span></span><br><span class="line">    AutoreleasePoolPage * <span class="keyword">const</span> parent; <span class="comment">//父page</span></span><br><span class="line">    AutoreleasePoolPage *child; <span class="comment">//子page</span></span><br><span class="line">    <span class="keyword">uint32_t</span> <span class="keyword">const</span> depth; <span class="comment">//深度</span></span><br><span class="line">    <span class="keyword">uint32_t</span> hiwat;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SIZE-sizeof(*this) bytes of contents follow</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> * <span class="keyword">operator</span> <span class="title">new</span><span class="params">(<span class="keyword">size_t</span> size)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> malloc_zone_memalign(malloc_default_zone(), SIZE, SIZE);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="keyword">operator</span> <span class="title">delete</span><span class="params">(<span class="keyword">void</span> * p)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">free</span>(p);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">protect</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> PROTECT_AUTORELEASEPOOL</span></span><br><span class="line">        mprotect(<span class="keyword">this</span>, SIZE, PROT_READ);</span><br><span class="line">        check();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>从代码里可以看出，他是一个典型的双向列表结构，没个<code>page</code>大小为<code>4096</code>Byte</p>
+<p>接下来，我们来看下该类的push和pop函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//PUSH</span></span><br><span class="line"> <span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> *<span class="title">push</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!hotPage()) &#123;</span><br><span class="line">            setHotPage(<span class="keyword">new</span> AutoreleasePoolPage(<span class="literal">NULL</span>));</span><br><span class="line">        &#125; </span><br><span class="line">        id *dest = autoreleaseFast(POOL_SENTINEL);</span><br><span class="line">        assert(*dest == POOL_SENTINEL);</span><br><span class="line">        <span class="keyword">return</span> dest;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>从代码里可以看到<code>POP()</code>函数中,<code>hotPage</code>是查找当前正在使用的<code>page</code>。第一次调用的时候hotPage为NULL,所以会新建一个<code>parent = NULL</code> 的 <code>AutoreleasePoolPage</code>对象，然后设置为<code>hotPage</code>实际上就是将TLS指针地址设置为该<code>page</code>地址</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">setHotPage</span><span class="params">(AutoreleasePoolPage *page)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (page) page-&gt;fastcheck();</span><br><span class="line">        tls_set_direct(key, (<span class="keyword">void</span> *)page); </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>然后调用 <code>autoreleaseFast()</code>方法</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">static inline id *autoreleaseFast(id obj)</span><br><span class="line">  &#123;</span><br><span class="line">      AutoreleasePoolPage *<span class="built_in">page</span> = hotPage();</span><br><span class="line">      <span class="function"><span class="title">if</span> (<span class="built_in">page</span> &amp;&amp; !<span class="built_in">page</span>-&gt;</span>full()) &#123;</span><br><span class="line">          <span class="function"><span class="title">return</span> <span class="built_in">page</span>-&gt;</span>add(obj);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          return autoreleaseSlow(obj);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>在方法中首先会获取先前设置的<code>hotPage</code>然后，判断这个<code>page</code>是否<code>full</code>如果存在<code>page</code>且没有满，则将对象添加到<code>page</code>中,也就是先前说到的<code>POOL_SENTINEL</code>哨兵对象。之后，返回对应的<code>page</code>。</p>
+<p>这里的<code>add</code>方法实际上是将前的栈顶指针往下移动。</p>
+<p>如果当前的<code>hotPage</code>已经满了,就会在这个双向列表的尾端再新增一个<code>page</code>,并将其设置为新的<code>hotPage</code></p>
+<h3 id="Pop部分"><a href="#Pop部分" class="headerlink" title="Pop部分"></a>Pop部分</h3><p>下面的token就是push的返回值，也就是<code>POOL_SENTINEL</code>的地址，创建第一次使用NULL创建的，通过这个地址，<br><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//POP</span></span><br><span class="line">static inline void pop(void *token) </span><br><span class="line">    &#123;</span><br><span class="line">        AutoreleasePoolPage *<span class="built_in">page</span>;</span><br><span class="line">        id *stop;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (token) &#123;</span><br><span class="line">            <span class="built_in">page</span> = pageForPointer(token); <span class="comment">//通过token找到对应page的地址</span></span><br><span class="line">            stop = (id *)token;</span><br><span class="line">            assert(*stop == POOL_SENTINEL);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// Token 0 is top-level pool</span></span><br><span class="line">            <span class="built_in">page</span> = coldPage();</span><br><span class="line">            assert(<span class="built_in">page</span>);</span><br><span class="line">            <span class="function"><span class="title">stop</span> = <span class="built_in">page</span>-&gt;</span>begin();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (PrintPoolHiwat) printHiwat();</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="title">page</span>-&gt;</span><span class="function"><span class="title">releaseUntil</span>(stop); //对栈顶（<span class="built_in">page</span>-&gt;</span>next）到stop地址</span><br><span class="line"></span><br><span class="line">        <span class="comment">// memory: delete empty children</span></span><br><span class="line">        <span class="comment">// hysteresis: keep one empty child if this page is more than half full</span></span><br><span class="line">        <span class="comment">// special case: delete everything for pop(0)</span></span><br><span class="line">        <span class="keyword">if</span> (!token) &#123;</span><br><span class="line">            <span class="function"><span class="title">page</span>-&gt;</span>kill();</span><br><span class="line">            setHotPage(NULL);</span><br><span class="line">        &#125; <span class="function"><span class="title">else</span> <span class="keyword">if</span> (<span class="built_in">page</span>-&gt;</span>child) &#123;</span><br><span class="line">            <span class="function"><span class="title">if</span> (<span class="built_in">page</span>-&gt;</span>lessThanHalfFull()) &#123;</span><br><span class="line">                <span class="function"><span class="title">page</span>-&gt;</span><span class="function"><span class="title">child</span>-&gt;</span>kill(); <span class="comment">//全部删除</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="function"><span class="title">else</span> <span class="keyword">if</span> (<span class="built_in">page</span>-&gt;</span><span class="function"><span class="title">child</span>-&gt;</span>child) &#123;</span><br><span class="line">                <span class="function"><span class="title">page</span>-&gt;</span><span class="function"><span class="title">child</span>-&gt;</span><span class="function"><span class="title">child</span>-&gt;</span>kill();<span class="comment">//保留一个子page</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看处，<code>releaseUntil()</code>方法<code>pop</code>了从栈顶到哨兵对象的之间的所有对象（都调用了一遍<code>objc_release</code>方法）<br>注释中还写明:<br>若是<code>pop（0）</code>，则会清除所有的<code>page</code>对象。<br>若当前的<code>page</code>存放对象大于一半<code>page</code>时，将保留一个子<code>page</code></p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>在大量创建临时变量的循环中，最好使用<code>autoreleaseblock</code>。这样在每次循环迭代中，只要block已结束，就会被release，减少内存占用。</li>
+<li>自动释放池实际上是一个双向链表结构，每次创建一个自动释放池都会首先在栈顶压入以一个哨兵对象— POOL_SENTINEL。在源码中是这样定义的 <code>#define POOL_SENTINEL 0</code>。前面也提到他是作为一个<strong>自动回收池边界</strong>。</li>
+<li>结合上面的描述，绘制了一个自动回收池的结构图，方便记忆<br><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fq9pnllynjj30s70cr0tt.jpg" alt=""></li>
+</ul>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/autoreleasepool/"> #autoreleasepool </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/27/《白话区块链》读书笔记/">《白话区块链》读书笔记</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2018/04/12/autoreleasepool分析/"
+               data-title="autoreleasepool分析" data-url="http://deeer.github.io/2018/04/12/autoreleasepool分析/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://7xjg07.com1.z0.glb.clouddn.com/u=3987586330,3835281882&fm=21&gp=0.jpg" alt="Deeer" />
+          <p class="site-author-name">Deeer</p>
+        </div>
+        <p class="site-description motion-element">代码手工艺人 | Love Linux  | 追求体验</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml">
+              <i class="menu-item-icon icon-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/2941461951/profile?topnav=1&wvr=6" target="_blank">weibo</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/Deeer" target="_blank">github</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">1.</span> <span class="nav-text">  </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Push部分"><span class="nav-number">2.</span> <span class="nav-text">Push部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pop部分"><span class="nav-number">2.1.</span> <span class="nav-text">Pop部分</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number"></span> <span class="nav-text">总结</span></a></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp;  2015 - 
+  2018
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Deeer</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"deeer"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+</body>
+</html>
