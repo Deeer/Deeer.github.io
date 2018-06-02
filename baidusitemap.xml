@@ -4,6 +4,46 @@
 
     
   <url>
+    <loc>http://deeer.github.io/2018/06/02/setTimeout%E6%8E%A2%E7%B4%A2/</loc>
+    <lastmod>2018-06-02T07:16:29.429Z</lastmod>
+    <data>
+        <display>
+        <title>setTimeout探索</title>
+        <pubTime>2018-06-02T07:02:55.000Z</pubTime>
+        
+        <tag>tips</tag>
+         
+         
+           
+             
+              <breadCrumb title="FrontEnd" url="http://deeer.github.io/categories/FrontEnd/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://deeer.github.io/2016/03/17/%E6%B3%A2%E6%B5%AA%E6%95%88%E6%9E%9C%E5%AE%9E%E7%8E%B0/</loc>
+    <lastmod>2018-05-24T14:30:08.000Z</lastmod>
+    <data>
+        <display>
+        <title>波浪效果实现</title>
+        <pubTime>2016-03-17T14:45:53.000Z</pubTime>
+        
+        <tag>UIGraphics</tag>
+         
+         
+           
+             
+              <breadCrumb title="iOS" url="http://deeer.github.io/categories/iOS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://deeer.github.io/2018/05/23/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%85%B3/</loc>
     <lastmod>2018-05-23T16:33:54.000Z</lastmod>
     <data>
@@ -37,26 +77,6 @@
            
              
               <breadCrumb title="ScourceCode" url="http://deeer.github.io/categories/ScourceCode/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://deeer.github.io/2016/03/17/%E6%B3%A2%E6%B5%AA%E6%95%88%E6%9E%9C%E5%AE%9E%E7%8E%B0/</loc>
-    <lastmod>2018-03-03T12:55:28.000Z</lastmod>
-    <data>
-        <display>
-        <title>波浪效果实现</title>
-        <pubTime>2016-03-17T14:45:53.000Z</pubTime>
-        
-        <tag>UIGraphics</tag>
-         
-         
-           
-             
-              <breadCrumb title="Animation" url="http://deeer.github.io/categories/Animation/"/>
           
         </display>
     </data>
