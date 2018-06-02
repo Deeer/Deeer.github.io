@@ -188,6 +188,7 @@
 </blockquote>
 <p>浏览器内核是多线程的，在一般情况下，会保留至少三个基本线程：<strong>JS引擎线程</strong>、<strong>GUI渲染线程</strong>、<strong>浏览器事件触发线程</strong></p>
 <p><strong>JS引擎线程</strong>: 基于事件执行，单线程处理，意味着任务都是一个接一个顺序执行的。<br><strong>GUI渲染线程</strong>: 负责渲染浏览器界面<br><strong>浏览器事件触发线程</strong>: 当一个事件触发时该线程会把事件添加到<code>JS引擎线程</code>的待处理队列的队尾中</p>
+<a id="more"></a>
 <p>其中要注意的是，<code>JS引擎线程</code>和<code>GUI渲染线程</code>是的<strong>互斥关系</strong>。</p>
 <hr>
 <h2 id="setTimeOut"><a href="#setTimeOut" class="headerlink" title="setTimeOut"></a>setTimeOut</h2><p>在代码执行时，当<code>JS</code>遇到<code>setTimeout</code>方法时，会将回调函数放在一个任务队列中，当<code>JS线程</code>空闲之后或达到设定的时间之后，执行任务队列中的任务。<br>这就解释了为什么在<code>for</code>循环中设定<code>setTimeout</code>方法的时候，并不会立刻执行，而是在其他代码执行完成之后，再去执行。</p>
