@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="Love,Dee" />
+  <meta name="keywords" content="Runtime," />
 
 
 
@@ -48,14 +48,12 @@
 
 
 
-  <title> Dee+'s Blog </title>
+  <title> runtime源码阅读（一） // Dee+'s Blog </title>
 </head>
 
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
-  <div class="container one-column 
-   page-home 
-">
+  <div class="container one-column page-post-detail">
     <div class="headband"></div>
 
     <div id="header" class="header">
@@ -125,9 +123,9 @@
       <div class="main-inner">
         <div id="content" class="content">
           
+
   <div id="posts" class="posts-expand">
     
-      
 
   <div class="post post-type-normal ">
     <div class="post-header">
@@ -138,9 +136,7 @@
           
           
             
-              <a class="post-title-link" href="/2018/06/27/runtime源码阅读（一）/">
-                runtime源码阅读（一）
-              </a>
+              runtime源码阅读（一）
             
           
         </h1>
@@ -176,8 +172,7 @@
       
 
       
-        
-          <h2 id="runtime源码阅读"><a href="#runtime源码阅读" class="headerlink" title="runtime源码阅读"></a>runtime源码阅读</h2><p>首先是对象的初始化</p>
+        <h2 id="runtime源码阅读"><a href="#runtime源码阅读" class="headerlink" title="runtime源码阅读"></a>runtime源码阅读</h2><p>首先是对象的初始化</p>
 <figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">  void _objcInit(void) &#123;</span><br><span class="line">	static int _done = <span class="number">0</span>;</span><br><span class="line">	int hidx;</span><br><span class="line">        <span class="comment">/* Protect against multiple invocations, as all library</span></span><br><span class="line"><span class="comment">         * initializers should. */</span></span><br><span class="line">        if (<span class="number">0</span> != _done) return;</span><br><span class="line">        _done = <span class="number">1</span>;</span><br><span class="line">	ptrace(<span class="number">0xb010</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);	<span class="comment">// marks call to _objcInit</span></span><br><span class="line">	__initialize_objc();</span><br><span class="line">	<span class="comment">/* We delay this until here, because dyld cannot detect and</span></span><br><span class="line"><span class="comment">	 * properly order calls to ObjC initializers amongst the</span></span><br><span class="line"><span class="comment">	 * calls to module and library initializers. */</span></span><br><span class="line">	for (hidx = <span class="number">0</span>; hidx &lt; header_count; hidx += <span class="number">1</span>)</span><br><span class="line">		_objc_call_loads_for_image (&amp;header_vector[hidx]);</span><br><span class="line">	ptrace(<span class="number">0xb01f</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);	<span class="comment">// marks call to _objcInit</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>首先是以下这段代码<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> _done = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> hidx;</span><br><span class="line">        <span class="comment">/* Protect against multiple invocations, as all library</span></span><br><span class="line"><span class="comment">         * initializers should. */</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> != _done) <span class="keyword">return</span>;</span><br><span class="line">        _done = <span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
 <p>正如他所写的，这个逻辑防止了被多次调用执行，保证了该方法只被执行一次。因为一旦第一次执行了，那么<code>_done</code>这个参数就会被赋值为1，之后调用就会直接<code>return</code></p>
@@ -225,345 +220,44 @@
 <p>总结： </p>
 <p>1.dyld在每次加载镜像的时候，都会调用回调方法，让系统生成类对应的<code>category</code>哈希表<br>2.每次对应添加方法时都会是分别添加对应的实例方法和类方法</p>
 
-        
       
     </div>
 
     <div class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/tags/Runtime/"> #Runtime </a>
+          
+        </div>
       
 
       
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/25/加密相关（二）/">加密相关（二）</a>
+            
+          </div>
+        </div>
       
-        <div class="post-eof"></div>
+
+      
       
     </div>
   </div>
 
 
+
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2018/06/25/加密相关（二）/">
-                加密相关（二）
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-06-25
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/Read-iOS/">Read iOS</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
+      <div class="comments" id="comments">
         
       </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>基于第一篇文章的介绍，接下来我们来聊聊日常生活中的都会接触到的加密应用方式–<code>HTTPS</code></p>
-<h2 id="HTTP-vs-HTTPS"><a href="#HTTP-vs-HTTPS" class="headerlink" title="HTTP vs HTTPS"></a>HTTP vs HTTPS</h2><p><code>HTTP</code>全称<code>Hyper Text Transfer Protocal</code>(超文本传输协议)是万维网服务器传输超文本协议到本地浏览器的传送协议，是一个属于应用层的面向对象的协议。</p>
-<p><code>HTTPS</code>全称<code>Secure Hypertext Transfer Protocol</code>安全超文本传输协议。</p>
-<h2 id="SSL-or-TLS"><a href="#SSL-or-TLS" class="headerlink" title="SSL or TLS"></a>SSL or TLS</h2><p>在<code>HTTPS</code>中的<code>S</code>可以是<code>SSL</code>或者<code>TLS</code>。</p>
-<p><code>SSL</code>全称<code>Secure Socket Layer</code>安全套接字层，位于可靠的面向连接的网络协议和应用层协议层。<code>SSL</code>通过互相认证、使用数字证书保证完整性，使用加密确保私密性，以实现客户端和服务器之间的安全通讯。该协议由两层组成: <code>SSL</code>记录协议和<code>SSL</code>握手协议。<code>SSL</code>是<code>Netscape</code>开发的专门用于保护<code>Web</code>通讯的。</p>
-<p><code>TLS</code>全称<code>Transport Layer Security</code>安全传输层协议，用于两个应用之间提供保密性和数据完整性。该协议由两层组成:  <code>TSL</code>记录协议和<code>TSL</code>握手协议。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/06/25/加密相关（二）/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2018/06/02/setTimeout探索/">
-                setTimeout探索
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-06-02
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/FrontEnd/">FrontEnd</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><blockquote>
-<p>并发&amp;&amp;并行</p>
-</blockquote>
-<p><strong>并发多线程</strong> : <code>ConCurrency</code> , 实质就是一个物理的<code>CPU</code>在若干个程序之间复用，由于每次切换执行程序的时间极短，所以一般用户无法察觉，即认为是多个应用在同时执行。<br><strong>并行多线程</strong> : <code>Paralleism</code> , 指两个或两个以上的事件在同一时刻发生，是真正意义上的不同事件在同一个时刻发送。</p>
-<blockquote>
-<p>JS线程</p>
-</blockquote>
-<p>浏览器内核是多线程的，在一般情况下，会保留至少三个基本线程：<strong>JS引擎线程</strong>、<strong>GUI渲染线程</strong>、<strong>浏览器事件触发线程</strong></p>
-<p><strong>JS引擎线程</strong>: 基于事件执行，单线程处理，意味着任务都是一个接一个顺序执行的。<br><strong>GUI渲染线程</strong>: 负责渲染浏览器界面<br><strong>浏览器事件触发线程</strong>: 当一个事件触发时该线程会把事件添加到<code>JS引擎线程</code>的待处理队列的队尾中</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/06/02/setTimeout探索/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2018/05/23/加密相关（一）/">
-                加密相关（一）
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-05-23
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/Read/">Read</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>前言：<br> <strong>这会是一篇主讲加密相关的文章，希望能在一定程度上理清日常使用的加密概念。</strong></p>
-</blockquote>
-<h3 id="对称加密与非对称加密"><a href="#对称加密与非对称加密" class="headerlink" title="对称加密与非对称加密"></a>对称加密与非对称加密</h3><p>首先，现有的加密技术分为两种，一种叫<code>对称加密</code>，即在加密和解密的时候使用的是同一个密钥。另一种叫<code>非对称加密</code>，这种加密技术中，存在两个概念—私钥和公钥。私钥一般是指，用于加密原文的不向外界透露的密钥。公钥则想法，一般是指向外界透露的，用于解密的密钥。其中公钥和私钥是一一对应关系，即只有私钥对应的公钥才能解密私钥加密的密文</p>
-<hr>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/05/23/加密相关（一）/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2018/04/12/autoreleasepool分析/">
-                autoreleasepool分析
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-04-12
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/ScourceCode/">ScourceCode</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Autorelease pool implementation</span><br><span class="line">A thread's autorelease pool is a stack of pointers. </span><br><span class="line">Each pointer is either an object to <span class="keyword">release</span>, <span class="keyword">or</span> POOL_SENTINEL which <span class="keyword">is</span> </span><br><span class="line"> an autorelease pool boundary.</span><br><span class="line">A pool token <span class="keyword">is</span> a pointer <span class="keyword">to</span> the POOL_SENTINEL <span class="keyword">for</span> that pool. <span class="keyword">When</span> </span><br><span class="line"> the pool <span class="keyword">is</span> popped, every <span class="keyword">object</span> hotter <span class="keyword">than</span> the sentinel <span class="keyword">is</span> released.</span><br><span class="line">The stack <span class="keyword">is</span> divided <span class="keyword">into</span> a doubly-linked <span class="keyword">list</span> <span class="keyword">of</span> pages. Pages <span class="keyword">are</span> added </span><br><span class="line"> <span class="keyword">and</span> deleted <span class="keyword">as</span> necessary. </span><br><span class="line"><span class="keyword">Thread</span>-<span class="keyword">local</span> <span class="keyword">storage</span> points <span class="keyword">to</span> the hot page, <span class="keyword">where</span> newly autoreleased objects <span class="keyword">are</span> stored.</span><br></pre></td></tr></table></figure>
-<p>翻译：<br>一个线程的自动释放池是一堆指针。指针要么是一个<code>release</code>对象，要么是一个<code>POOL_SENTINEL</code> — <code>POOL_SENTINEL</code>是一个自动回收池边界</p>
-<p>一个<code>pool token</code>对于那个释放池来讲是一个指向<code>POOL_SENTINEL</code>(池子哨兵)的指针。当池子被释放时，每个比哨兵hotter的对象都要被释放–不是很懂。这个栈被划分为一系列双向列表，列表根据需要添加或者删除</p>
-<p>TLS指针指向<code>hot page</code>，他就是最新的自动释放对对象存储的地方<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/04/12/autoreleasepool分析/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-  </div>
-
-  
-  <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
   </div>
 
 
@@ -586,6 +280,15 @@
   <div id="sidebar" class="sidebar">
     <div class="sidebar-inner">
 
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
       
 
       <div class="site-overview">
@@ -647,6 +350,17 @@
       </div>
 
       
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#runtime源码阅读"><span class="nav-number">1.</span> <span class="nav-text">runtime源码阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#category-部分"><span class="nav-number">2.</span> <span class="nav-text">category 部分</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
 
     </div>
   </div>
@@ -707,6 +421,145 @@
 
 
   
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
 
   <script type="text/javascript">
     $(document).ready(function () {
