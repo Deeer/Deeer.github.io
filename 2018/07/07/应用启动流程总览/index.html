@@ -77,7 +77,7 @@
       <li class="menu-item menu-item-home">
         <a href="/">
           <i class="menu-item-icon icon-home"></i> <br />
-          首页
+          Home
         </a>
       </li>
     
@@ -85,7 +85,7 @@
       <li class="menu-item menu-item-categories">
         <a href="/categories">
           <i class="menu-item-icon icon-categories"></i> <br />
-          分类
+          Categories
         </a>
       </li>
     
@@ -93,7 +93,7 @@
       <li class="menu-item menu-item-archives">
         <a href="/archives">
           <i class="menu-item-icon icon-archives"></i> <br />
-          归档
+          Archives
         </a>
       </li>
     
@@ -101,7 +101,7 @@
       <li class="menu-item menu-item-tags">
         <a href="/tags">
           <i class="menu-item-icon icon-tags"></i> <br />
-          标签
+          Tags
         </a>
       </li>
     
@@ -109,7 +109,7 @@
       <li class="menu-item menu-item-about">
         <a href="/about">
           <i class="menu-item-icon icon-about"></i> <br />
-          关于
+          About
         </a>
       </li>
     
@@ -144,7 +144,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-07-07
+          Posted on 2018-07-07
         </span>
 
         
@@ -190,8 +190,8 @@
 <li><strong>LLVM</strong> ： 是架构编译器的框架系统，用<code>C++</code>写成。用以优化以任意语言编写的程序的编译时间，链接时间，运行时间及空闲时间。是一个完整的编译器架构，也可以认为是一个用于开发编译器、解释器的相关库</li>
 <li><strong>Clang</strong> ： <code>C++</code>编写，基于LLVMBSD许可证下的<code>C/C++/OC++</code>编译器前端（由<code>Apple</code>开发，源代码授权使用<code>BSD</code>的开源授权）</li>
 </ul>
-<h2 id="dyld"><a href="#dyld" class="headerlink" title="dyld"></a>dyld</h2><p><code>dyld</code>是<code>Apple</code>的动态链接库，这一步骤是在<strong>链接</strong>完成之后的生成了<code>Mach-O</code>的可执行文件后，系统已经做好了程序启动的准备，并将控制权交给了<code>dyld</code>。<code>dyld</code>主要负责初始化程序环境，将可执行文件和相应的依赖与库文件加载进内存生成对应的<code>ImageLoader</code>类（也就是镜像文件），对这些文件进行链接，最后调用每个依赖库的初始化方法。与此同时，对程序中的类进行类结构初始化，调用类和分类中的<code>load</code>方法。最后<code>dyld</code>返回<code>main</code>函数，并做清理工作，回归调用栈。</p>
-<h2 id="完整的编译流程如下"><a href="#完整的编译流程如下" class="headerlink" title="完整的编译流程如下"></a>完整的编译流程如下</h2><ul>
+<h1 id="dyld"><a href="#dyld" class="headerlink" title="dyld"></a>dyld</h1><p><code>dyld</code>是<code>Apple</code>的动态链接库，这一步骤是在<strong>链接</strong>完成之后的生成了<code>Mach-O</code>的可执行文件后，系统已经做好了程序启动的准备，并将控制权交给了<code>dyld</code>。<code>dyld</code>主要负责初始化程序环境，将可执行文件和相应的依赖与库文件加载进内存生成对应的<code>ImageLoader</code>类（也就是镜像文件），对这些文件进行链接，最后调用每个依赖库的初始化方法。与此同时，对程序中的类进行类结构初始化，调用类和分类中的<code>load</code>方法。最后<code>dyld</code>返回<code>main</code>函数，并做清理工作，回归调用栈。</p>
+<h1 id="完整的编译流程如下"><a href="#完整的编译流程如下" class="headerlink" title="完整的编译流程如下"></a>完整的编译流程如下</h1><ul>
 <li>编译信息写入辅助文件，创建<code>.app</code>文件</li>
 <li>处理打包信息</li>
 <li>执行<code>CocoaPod</code>编译前脚本</li>
@@ -295,10 +295,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
+            Table Of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
+            Overview
           </li>
         </ul>
       
@@ -313,21 +313,21 @@
           <div class="site-state-item site-state-posts">
             <a href="/archives">
               <span class="site-state-item-count">15</span>
-              <span class="site-state-item-name">日志</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
               <span class="site-state-item-count">8</span>
-              <span class="site-state-item-name">分类</span>
+              <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
               <span class="site-state-item-count">12</span>
-              <span class="site-state-item-name">标签</span>
+              <span class="site-state-item-name">tags</span>
               </a>
           </div>
 
@@ -367,7 +367,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#编译"><span class="nav-number">1.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#链接"><span class="nav-number">2.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装载"><span class="nav-number">3.</span> <span class="nav-text">装载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#呈现"><span class="nav-number">4.</span> <span class="nav-text">呈现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">4.1.</span> <span class="nav-text">  </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#插播"><span class="nav-number">5.</span> <span class="nav-text">插播</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dyld"><span class="nav-number">5.1.</span> <span class="nav-text">dyld</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整的编译流程如下"><span class="nav-number">5.2.</span> <span class="nav-text">完整的编译流程如下</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#main之后"><span class="nav-number">6.</span> <span class="nav-text">main之后</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行状态"><span class="nav-number">7.</span> <span class="nav-text">运行状态</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#编译"><span class="nav-number">1.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#链接"><span class="nav-number">2.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装载"><span class="nav-number">3.</span> <span class="nav-text">装载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#呈现"><span class="nav-number">4.</span> <span class="nav-text">呈现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">4.1.</span> <span class="nav-text">  </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#插播"><span class="nav-number">5.</span> <span class="nav-text">插播</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dyld"><span class="nav-number">6.</span> <span class="nav-text">dyld</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完整的编译流程如下"><span class="nav-number">7.</span> <span class="nav-text">完整的编译流程如下</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#main之后"><span class="nav-number">8.</span> <span class="nav-text">main之后</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行状态"><span class="nav-number">9.</span> <span class="nav-text">运行状态</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -393,11 +393,11 @@
 </div>
 
 <div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
-  主题 -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Mist
   </a>
