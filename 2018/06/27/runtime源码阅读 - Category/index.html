@@ -77,7 +77,7 @@
       <li class="menu-item menu-item-home">
         <a href="/">
           <i class="menu-item-icon icon-home"></i> <br />
-          Home
+          首页
         </a>
       </li>
     
@@ -85,7 +85,7 @@
       <li class="menu-item menu-item-categories">
         <a href="/categories">
           <i class="menu-item-icon icon-categories"></i> <br />
-          Categories
+          分类
         </a>
       </li>
     
@@ -93,7 +93,7 @@
       <li class="menu-item menu-item-archives">
         <a href="/archives">
           <i class="menu-item-icon icon-archives"></i> <br />
-          Archives
+          归档
         </a>
       </li>
     
@@ -101,7 +101,7 @@
       <li class="menu-item menu-item-tags">
         <a href="/tags">
           <i class="menu-item-icon icon-tags"></i> <br />
-          Tags
+          标签
         </a>
       </li>
     
@@ -109,7 +109,7 @@
       <li class="menu-item menu-item-about">
         <a href="/about">
           <i class="menu-item-icon icon-about"></i> <br />
-          About
+          关于
         </a>
       </li>
     
@@ -144,12 +144,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2018-06-27
+          发表于 2018-06-27
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; In
+            &nbsp; | &nbsp; 分类于
             
               <a href="/categories/ScourceCode/">ScourceCode</a>
 
@@ -176,7 +176,7 @@
 <figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">  void _objcInit(void) &#123;</span><br><span class="line">	static int _done = <span class="number">0</span>;</span><br><span class="line">	int hidx;</span><br><span class="line">        <span class="comment">/* Protect against multiple invocations, as all library</span></span><br><span class="line"><span class="comment">         * initializers should. */</span></span><br><span class="line">        if (<span class="number">0</span> != _done) return;</span><br><span class="line">        _done = <span class="number">1</span>;</span><br><span class="line">	ptrace(<span class="number">0xb010</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);	<span class="comment">// marks call to _objcInit</span></span><br><span class="line">	__initialize_objc();</span><br><span class="line">	<span class="comment">/* We delay this until here, because dyld cannot detect and</span></span><br><span class="line"><span class="comment">	 * properly order calls to ObjC initializers amongst the</span></span><br><span class="line"><span class="comment">	 * calls to module and library initializers. */</span></span><br><span class="line">	for (hidx = <span class="number">0</span>; hidx &lt; header_count; hidx += <span class="number">1</span>)</span><br><span class="line">		_objc_call_loads_for_image (&amp;header_vector[hidx]);</span><br><span class="line">	ptrace(<span class="number">0xb01f</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);	<span class="comment">// marks call to _objcInit</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>首先是以下这段代码<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> _done = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> hidx;</span><br><span class="line">        <span class="comment">/* Protect against multiple invocations, as all library</span></span><br><span class="line"><span class="comment">         * initializers should. */</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> != _done) <span class="keyword">return</span>;</span><br><span class="line">        _done = <span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
 <p>正如他所写的，这个逻辑防止了被多次调用执行，保证了该方法只被执行一次。因为一旦第一次执行了，那么<code>_done</code>这个参数就会被赋值为1，之后调用就会直接<code>return</code></p>
-<p>接下来，这里有个<code>ptrace</code>方法,这个方法主要用于断点调试和追踪系统调用。对于实现整体的逻辑实现没有太大影响，我们可以将它忽略。</p>
+<p>接下来，这里有个<code>ptrace</code>方法,这个方法主要用于断点调试和追踪系统调用。对于实现整体的逻辑实现没有太大影响，我们可以将它忽略。<br> <a id="more"></a> </p>
 <p>之后调用了<br><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__initialize_objc()<span class="comment">;</span></span><br></pre></td></tr></table></figure></p>
 <p>该方法是动态链接器用来初始化库文件，通过头文件创建了一个全局的迭代器，并通过类的<code>hash</code>表，和对应头文件的迭代器来获取<code>class</code>。</p>
 <h2 id="category-部分"><a href="#category-部分" class="headerlink" title="category 部分"></a>category 部分</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/* Library initializer called by dyld. */</span></span><br><span class="line"><span class="keyword">void</span> __initialize_objc(<span class="keyword">void</span>) &#123;</span><br><span class="line">	<span class="keyword">int</span> hidx;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined(NeXT_PDO)</span></span><br><span class="line">	<span class="keyword">const</span> headerType * <span class="keyword">const</span> *	headers;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ( rocketLaunchingDebug == <span class="number">-1</span> ) &#123;</span><br><span class="line">	    <span class="keyword">if</span> ( getenv(<span class="string">"OBJC_UNIQUE_DEBUG"</span>) ) rocketLaunchingDebug = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> rocketLaunchingDebug = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Get architecture dependent module headers</span></span><br><span class="line">	headers = (<span class="keyword">const</span> headerType * <span class="keyword">const</span> *) _getObjcHeaders ();</span><br><span class="line">	<span class="keyword">if</span> (headers)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// Create vector from these headers</span></span><br><span class="line">		header_vector = _objc_headerVector (headers);</span><br><span class="line">		<span class="keyword">if</span> (header_vector) </span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// Load classes from all images in the vector</span></span><br><span class="line">			<span class="keyword">for</span> (hidx = <span class="number">0</span>; hidx &lt; header_count; hidx += <span class="number">1</span>)</span><br><span class="line">				(<span class="keyword">void</span>) _objc_get_classes_from_image (class_hash, &amp;header_vector[hidx]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined(__MACH__)</span></span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> _done = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">extern</span> <span class="keyword">void</span> __CFInitialize(<span class="keyword">void</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Protect against multiple invocations, as all library</span></span><br><span class="line"><span class="comment">	 * initializers should. */</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="number">0</span> != _done) <span class="keyword">return</span>;</span><br><span class="line">	_done = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	ptrace(<span class="number">0xb000</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// make sure CF is initialized before we go further;</span></span><br><span class="line">	<span class="comment">// someday this can be removed, as it'll probably be automatic</span></span><br><span class="line">	__CFInitialize();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Create the class lookup table</span></span><br><span class="line">	_objc_init_class_hash ();</span><br><span class="line">	</span><br><span class="line"><span class="comment">//	ptrace(0xb001, 0, 0, 0);</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Get our configuration</span></span><br><span class="line">        <span class="keyword">if</span> ( rocketLaunchingDebug == <span class="number">-1</span> ) &#123;</span><br><span class="line">            <span class="keyword">if</span> ( getenv(<span class="string">"OBJC_UNIQUE_DEBUG"</span>) ) rocketLaunchingDebug = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> rocketLaunchingDebug = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//	ptrace(0xb003, 0, 0, 0);</span></span><br><span class="line"></span><br><span class="line">	map_selectors_pended = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// XXXXX BEFORE HERE *NO* PAGES ARE STOMPED ON</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Register our image mapping routine with dyld so it</span></span><br><span class="line">	<span class="comment">// gets invoked when an image is added.  This also invokes</span></span><br><span class="line">	<span class="comment">// the callback right now on any images already present.</span></span><br><span class="line">	_dyld_register_func_for_add_image (&amp;_objc_map_image_callback);</span><br><span class="line">	</span><br><span class="line"><span class="comment">// XXXXX BEFORE HERE *ALL* PAGES ARE STOMPED ON</span></span><br><span class="line"></span><br><span class="line">	map_selectors_pended  = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line"><span class="comment">//	ptrace(0xb005, 0, 0, 0);</span></span><br><span class="line">		</span><br><span class="line">	<span class="comment">// Register module link callback with dyld</span></span><br><span class="line">	_dyld_register_func_for_link_module (&amp;_objc_link_module_callback);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Register callback with dyld</span></span><br><span class="line">	_dyld_register_func_for_unlink_module (&amp;_objc_unlink_module_callback);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// MACH</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//	ptrace(0xb006, header_count, 0, 0);</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Install relations on classes that were found</span></span><br><span class="line">	<span class="keyword">for</span> (hidx = <span class="number">0</span>; hidx &lt; header_count; hidx += <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span>			nModules;</span><br><span class="line">		<span class="keyword">int</span>			index;</span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">objc_module</span> *	<span class="title">module</span>;</span></span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">objc_class</span> *	<span class="title">cls</span>;</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">module</span> = (struct objc_module *) ((<span class="keyword">unsigned</span> <span class="keyword">long</span>) header_vector[hidx].mod_ptr + header_vector[hidx].image_slide);</span><br><span class="line">		<span class="keyword">for</span> (nModules = header_vector[hidx].mod_count; nModules; nModules -= <span class="number">1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">for</span> (index = <span class="number">0</span>; index &lt; <span class="keyword">module</span>-&gt;symtab-&gt;cls_def_cnt; index += <span class="number">1</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				cls = (struct objc_class *) <span class="keyword">module</span>-&gt;symtab-&gt;defs[index];</span><br><span class="line">				_class_install_relationships (cls, <span class="keyword">module</span>-&gt;version);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">module</span> += <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//		ptrace(0xb007, hidx, header_vector[hidx].mod_count, 0);</span></span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"><span class="comment">//	ptrace(0xb008, header_count, 0, 0);</span></span><br><span class="line">		</span><br><span class="line">	<span class="keyword">for</span> (hidx = <span class="number">0</span>; hidx &lt; header_count; hidx += <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> !defined(__MACH__)</span></span><br><span class="line">		(<span class="keyword">void</span>)_objc_add_categories_from_image (&amp;header_vector[hidx]);</span><br><span class="line">		(<span class="keyword">void</span>) _objc_fixup_selector_refs (&amp;header_vector[hidx]);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">		<span class="comment">// Initialize the isa pointers of all NXConstantString objects</span></span><br><span class="line">		(<span class="keyword">void</span>)_objc_fixup_string_objects_for_image (&amp;header_vector[hidx]);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Convert class refs from name pointers to ids</span></span><br><span class="line">		(<span class="keyword">void</span>)_objc_map_class_refs_for_image (&amp;header_vector[hidx]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//	ptrace(0xb00a, 0, 0, 0);</span></span><br><span class="line">		</span><br><span class="line">	<span class="comment">// For each image selectorize the method names and +_fixup each of</span></span><br><span class="line">	<span class="comment">// protocols in the image</span></span><br><span class="line">	<span class="keyword">for</span> (hidx = <span class="number">0</span>; hidx &lt; header_count; hidx += <span class="number">1</span>)</span><br><span class="line">		_objc_fixup_protocol_objects_for_image (&amp;header_vector[hidx]);</span><br><span class="line">	</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined(WIN32) || defined(__svr4__)</span></span><br><span class="line">	CMH = (objcModHeader *) <span class="number">0</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">	ptrace(<span class="number">0xb00f</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);	<span class="comment">// end of ObjC init</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -285,10 +285,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table Of Contents
+            文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
+            站点概览
           </li>
         </ul>
       
@@ -303,21 +303,21 @@
           <div class="site-state-item site-state-posts">
             <a href="/archives">
               <span class="site-state-item-count">15</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
               <span class="site-state-item-count">8</span>
-              <span class="site-state-item-name">categories</span>
+              <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
               <span class="site-state-item-count">12</span>
-              <span class="site-state-item-name">tags</span>
+              <span class="site-state-item-name">标签</span>
               </a>
           </div>
 
@@ -383,11 +383,11 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
-  Theme -
+  主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Mist
   </a>
