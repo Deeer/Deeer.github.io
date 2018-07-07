@@ -138,6 +138,83 @@
           
           
             
+              <a class="post-title-link" href="/2018/04/12/autoreleasepool分析/">
+                autoreleasepool分析
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2018-04-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/ScourceCode/">ScourceCode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Autorelease pool implementation</span><br><span class="line">A thread's autorelease pool is a stack of pointers. </span><br><span class="line">Each pointer is either an object to <span class="keyword">release</span>, <span class="keyword">or</span> POOL_SENTINEL which <span class="keyword">is</span> </span><br><span class="line"> an autorelease pool boundary.</span><br><span class="line">A pool token <span class="keyword">is</span> a pointer <span class="keyword">to</span> the POOL_SENTINEL <span class="keyword">for</span> that pool. <span class="keyword">When</span> </span><br><span class="line"> the pool <span class="keyword">is</span> popped, every <span class="keyword">object</span> hotter <span class="keyword">than</span> the sentinel <span class="keyword">is</span> released.</span><br><span class="line">The stack <span class="keyword">is</span> divided <span class="keyword">into</span> a doubly-linked <span class="keyword">list</span> <span class="keyword">of</span> pages. Pages <span class="keyword">are</span> added </span><br><span class="line"> <span class="keyword">and</span> deleted <span class="keyword">as</span> necessary. </span><br><span class="line"><span class="keyword">Thread</span>-<span class="keyword">local</span> <span class="keyword">storage</span> points <span class="keyword">to</span> the hot page, <span class="keyword">where</span> newly autoreleased objects <span class="keyword">are</span> stored.</span><br></pre></td></tr></table></figure>
+<p>翻译：<br>一个线程的自动释放池是一堆指针。指针要么是一个<code>release</code>对象，要么是一个<code>POOL_SENTINEL</code> — <code>POOL_SENTINEL</code>是一个自动回收池边界</p>
+<p>一个<code>pool token</code>对于那个释放池来讲是一个指向<code>POOL_SENTINEL</code>(池子哨兵)的指针。当池子被释放时，每个比哨兵hotter的对象都要被释放–不是很懂。这个栈被划分为一系列双向列表，列表根据需要添加或者删除</p>
+<p>TLS指针指向<code>hot page</code>，他就是最新的自动释放对对象存储的地方<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/04/12/autoreleasepool分析/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2018/02/27/《白话区块链》读书笔记/">
                 《白话区块链》读书笔记
               </a>
@@ -414,81 +491,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2016/03/17/波浪效果实现/">
-                波浪效果实现
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2016-03-17
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/iOS/">iOS</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>最近项目中想添加一些动画，然后就想到了波浪的效果。<br>Google了一下大致，大致的方法就是用Quartz这个frameWork绘制</p>
-<p>主要的核心代码<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/17/波浪效果实现/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -527,7 +529,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -541,7 +543,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

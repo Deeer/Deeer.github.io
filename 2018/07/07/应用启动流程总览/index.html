@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="Twitter　," />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -48,7 +48,7 @@
 
 
 
-  <title> 读书笔记之仿推特启动界面实现Demo // Dee+'s Blog </title>
+  <title> 应用启动流程总览 // Dee+'s Blog </title>
 </head>
 
 <body>
@@ -136,7 +136,7 @@
           
           
             
-              读书笔记之仿推特启动界面实现Demo
+              应用启动流程总览
             
           
         </h1>
@@ -144,20 +144,9 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2016-01-03
+          Posted on 2018-07-07
         </span>
 
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/iOSDemo/">iOSDemo</a>
-
-              
-              
-
-            
-          </span>
         
 
         
@@ -172,54 +161,77 @@
       
 
       
-        <p><strong><em>前言</em></strong></p>
-<p>今天要实现的是推特的启动界面的效果</p>
-<p>类似于这样<br><img src="http://7xjg07.com1.z0.glb.clouddn.com/twitterp.gif" alt="twitter0"><br><a id="more"></a></p>
-<p>##首先<br>添加背景图片，之后在上面添加一层Layer作为遮罩。<br>这里的遮罩和PS中的遮罩效果大致相同。就是在上层layer的相应区域内才会出现下层区域的内容<br>效果如图<br><img src="http://7xjg07.com1.z0.glb.clouddn.com/twittertwitter0.png" alt="twitter1"></p>
-<p>很明显可以看出上层覆盖了一层星型的遮罩。</p>
-<p>##第二步<br>实现遮罩的大小变化。<br>这里是使用CAKeyframeAnimtion 来实现<br>具体代码如下</p>
-<pre><code>let transform = CAKeyframeAnimation(keyPath: &quot;bounds&quot;)
-    transform.delegate = self
-    transform.duration = 1
-    transform.beginTime = CACurrentMediaTime() + 1
-    let initalBounds = NSValue(CGRect:  CGRectMake(0, 0, 414, 763))
-    let secoundBounds = NSValue(CGRect: CGRectMake(0, 0, 50, 50))
-    let finalBounds = NSValue(CGRect:  CGRectMake(0, 0, 2000, 2000))
-    transform.values = [initalBounds,secoundBounds,finalBounds]
-    transform.keyTimes = [0 ,0.4,1]
-    transform.timingFunctions = [CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut),CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)]
-    transform.removedOnCompletion = false
-    transform.fillMode = kCAFillModeForwards
-    masklayer.addAnimation(transform, forKey:&quot;maskAnimation&quot;)
-
-    UIView.animateWithDuration(0.25, delay: 1.3, options: UIViewAnimationOptions.TransitionNone, animations: { () -&gt; Void in
-        self.backgroundImageView!.transform = CGAffineTransformMakeScale(1.05, 1.05)
-        }) { (NilLiteralConvertible) -&gt; Void in   
-    }
-</code></pre><p><strong><em>－－－插播－－－</em></strong></p>
-<ol>
-<li>CAKeyframeAnimtion 从名字中也能看出是就是<em>关键帧动画</em>的意思。这个概念和flash中的关键帧动物十分相似。我们在使用flash制作相关动画的时候，常常需要设置初始状态，结束状态，然后使用补间动画完成过渡。我们甚至能在动画运动的过程中指定任意位置的状态。在这的实现也是同样的，我们通过keyPath可以创建对应的动画类型。<em>注意:</em>这里的’bounds’并不是随意给出的。有关key对应的可选值有:bounds、position等类似这样的Animatable属性。我们设置了三种状态initalBounds、secoundBounds、finalBounds分别对应三个keyTime:[0 ,0.4,1]</li>
-</ol>
-<p>2.当在给一个CALyer添加动画的时候，动画并没有改变layer的实际属性，系统会创建一个原始layer的拷贝作为并在此基础上进行动画渲染。苹果将原始layer称为Model Layer，将拷贝的layer称为Presentation Layer.Presentation Layer会随动画的进度实时改变，而Model Layer不会</p>
-<p>3.在动画结束后，系统会自动销毁Presentation Layer所以动画会回到初始的状态，所以这里要使用removedOnCompletion这个属性，而这个属性默认是true，所以我们将其设为false。这样就不会移除最后的效果了</p>
-<p>4.有关的fillMode的相关介绍:该属性有四个枚举值，分别对应四种不同的情况</p>
-<pre><code>kCAFillModeRemoved:动画结束后，将layer设置回初始的状态,动画开始和结束前对动画都没有影响
-kCAFillModeForwards:动画结束后保持动画最后的状态
-kCAFillModeBackwards:动画开始前，只要将动画加入layer，layer就处于动画的初始状态
-kCAFillModeBoth:动画加入后，立即处于初始状态，动画结束后，保持动画结束状态
-</code></pre><p><strong><em>－－－插播结束－－－</em></strong></p>
-<p>#最后<br>为了能将动画效果衔接的更好，我们需要在遮罩和背景层之间添加一层动画</p>
-<pre><code>let maskView = UIView()
-   maskView.frame = CGRectMake(0, 0, 414, 867)
-   maskView.backgroundColor = UIColor.whiteColor()
-   self.view.addSubview(maskView)
-   self.view.bringSubviewToFront(maskView)
-   UIView .animateWithDuration(0.1, delay: 1.35, options: UIViewAnimationOptions.CurveEaseIn, animations: { () -&gt; Void in
-       maskView.alpha = 0.0
-       }) { (NilLiteralConvertible) -&gt; Void in
-           maskView.removeFromSuperview()
-   }
-</code></pre><p><strong><em>实现完整代码:<a href="https://github.com/Deeer/twitterLunchrAnnimationDemo" target="_blank" rel="noopener">https://github.com/Deeer/twitterLunchrAnnimationDemo</a></em></strong></p>
+        <h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><p>在编译之前，就进行词法和语法的分析，接着将源代码翻译成中间代码，也就是汇编语言。<br>编译程序工作时，会先分析，最后得到目标程序，所谓的分析也就是对词法和语法的分析。翻译成汇编，最后生成可执行文件</p>
+<h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h1><p>每个类都会被编译成不同的目标文件，链接器就是将每个文件串起来，相会调用，生成可执行文件（<code>Mach-O</code>格式）</p>
+<h1 id="装载"><a href="#装载" class="headerlink" title="装载"></a>装载</h1><p>把已生成的可执行文件放到操作系统的专属进程下，并找到机器可识别的汇编代码入口，开始按照汇编去执行机器码，并能与操作系统级别的API对接。</p>
+<h1 id="呈现"><a href="#呈现" class="headerlink" title="呈现"></a>呈现</h1><p>整个编译、链接、装载完成之后，就会回到<code>mian()</code>函数，清空之前的所有线程，并根据代码逻辑进行app展示</p>
+<hr>
+<h1 id="插播"><a href="#插播" class="headerlink" title="插播"></a>插播</h1><blockquote>
+<p>编译型语言 vs 解释型语言</p>
+</blockquote>
+<ul>
+<li><p>编译型语言有单独的编译过程</p>
+</li>
+<li><p>解释型语言在运行的时候将程序翻译成机器语言，速度相对较慢</p>
+</li>
+</ul>
+<p>##LLVM架构</p>
+<p><strong>传统的编译器</strong>分为三个部分：</p>
+<ul>
+<li><strong>前端</strong>：主要负责语法和词法，将源代码生成抽象代码树</li>
+<li><strong>优化器</strong>： 在前端基础上对代码进行优化</li>
+<li><strong>后端</strong>：将优化后的中间代码转为针对各个平台的机器代码</li>
+</ul>
+<p>如图<br><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ft1d6mzyv1j30d60243ye.jpg" alt=""></p>
+<p><a href="https://www.jianshu.com/p/9fc7776cce9b" target="_blank" rel="noopener">这里</a>是LLVM架构的概述</p>
+<blockquote>
+<p>LLVM &amp;&amp; Clang</p>
+</blockquote>
+<ul>
+<li><strong>LLVM</strong> ： 是架构编译器的框架系统，用C++写成。用以优化以任意语言编写的程序的编译时间，链接时间，运行时间及空闲时间。是一个完整的编译器架构，也可以认为是一个用于开发编译器、解释器的相关库</li>
+<li><strong>Clang</strong> ： C++ 编写，基于LLVMBSD许可证下的<code>C/C++/OC++</code>编译器前端（由<code>Apple</code>开发，源代码授权使用<code>BSD</code>的开源授权）</li>
+</ul>
+<h2 id="dyld"><a href="#dyld" class="headerlink" title="dyld"></a>dyld</h2><p><code>dyld</code>是<code>Apple</code>的动态链接库，这一步骤是在<strong>链接</strong>完成之后的生成了<code>Mach-O</code>的可执行文件后，系统已经做好了程序启动的准备，并将控制权交给了<code>dyld</code>。<code>dyld</code>主要负责初始化程序环境，将可执行文件和相应的依赖与库文件加载进内存生成对应的<code>ImageLoader</code>类（也就是镜像文件），对这些文件进行链接，最后调用每个依赖库的初始化方法。与此同时，对程序中的类进行类结构初始化，调用类和分类中的<code>load</code>方法。最后<code>dyld</code>返回<code>main</code>函数，并做清理工作，回归调用栈。</p>
+<h2 id="完整的编译流程如下"><a href="#完整的编译流程如下" class="headerlink" title="完整的编译流程如下"></a>完整的编译流程如下</h2><ul>
+<li>编译信息写入辅助文件，创建<code>.app</code>文件</li>
+<li>处理打包信息</li>
+<li>执行<code>CocoaPod</code>编译前脚本</li>
+<li>编译<code>.m</code>文件，使用<code>Compile</code>和<code>Clang</code>命令</li>
+<li>链接需要的<code>Framework</code></li>
+<li>编译<code>Xib</code></li>
+<li>拷贝<code>Xib</code>，资源文件</li>
+<li>编译<code>ImageAssets</code></li>
+<li>处理<code>info.plist</code></li>
+<li>执行<code>CocoaPod</code>脚本</li>
+<li>拷贝标准库</li>
+<li>创建<code>.app</code>文件和签名</li>
+</ul>
+<hr>
+<h1 id="main之后"><a href="#main之后" class="headerlink" title="main之后"></a>main之后</h1><blockquote>
+<p>main</p>
+</blockquote>
+<p>大致流程：</p>
+<ul>
+<li><code>main</code>函数</li>
+<li>执行<code>UIApplicationMain</code>函数</li>
+<li>创建<code>UIApplication</code>对象</li>
+<li>创建<code>UIApplicationDelegate</code>对象</li>
+<li>创建对应的<code>RunLoop</code>循环</li>
+<li><code>UIApplication</code>开始处理监听到的事件</li>
+<li>读取配置文件<code>info.plist</code>，设置程序启动的一些属性 </li>
+<li>如果<code>plist</code>文件中配置了<code>storyboard</code>文件名，则加载对应的<code>storyboard</code>文件，并根据这个文件中启动配置加载和现实窗口，显示对应的控件。</li>
+<li>如果没有配置，则根据<code>application:didFinishLaunchingWithOptions:</code>代码来创建<code>UIWindow</code></li>
+</ul>
+<blockquote>
+<p> UIApplication</p>
+</blockquote>
+<p>从进入<code>main()</code>方法之后，会创建一个<code>UIApplication</code>对象，他主要做以下几件事:<br>1.从<code>StoryBoard</code>文件加载用户界面<br>2.调用<code>AppDelegate</code>自定义代码类做一些初始化设置<br>3.将app放入<code>main Run Loop</code> 环境来响应和处理与用户交互产生的事件</p>
+<blockquote>
+<p>Main Run Loop </p>
+</blockquote>
+<p> 主要作用：处理所有与用户相关的事件。<code>UIApplication</code>对象在启动时就设置<code>Main Run Loop</code> 和使用他来处理和更新基于<code>view</code>的界面</p>
+<h1 id="运行状态"><a href="#运行状态" class="headerlink" title="运行状态"></a>运行状态</h1><p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1ft1e0ppxlnj30ft0hp0ta.jpg" alt=""></p>
+<p><strong>NotRun</strong> : 未运行<br><strong>InActive</strong> : 处于<code>Forground</code>状态，但不接收事件<br><strong>Active</strong> : 处于<code>Forground</code>状态，接收事件<br><strong>Background</strong> : 处于<code>Background</code>状态，执行代码<br><strong>Suspend</strong> : 处于<code>Background</code>状态，不执行代码</p>
 
       
     </div>
@@ -228,7 +240,7 @@ kCAFillModeBoth:动画加入后，立即处于初始状态，动画结束后，�
       
         <div class="post-tags">
           
-            <a href="/tags/Twitter/"> #Twitter　 </a>
+            <a href="/tags/iOS/"> #iOS </a>
           
         </div>
       
@@ -237,13 +249,11 @@ kCAFillModeBoth:动画加入后，立即处于初始状态，动画结束后，�
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/03/17/波浪效果实现/">波浪效果实现</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/31/2015年度总结/">2015年度总结</a>
+              <a href="/2018/06/27/runtime源码阅读 - Category/">runtime源码阅读 - Category</a>
             
           </div>
         </div>
@@ -358,7 +368,7 @@ kCAFillModeBoth:动画加入后，立即处于初始状态，动画结束后，�
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">This post does not have a Table Of Contents</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#编译"><span class="nav-number">1.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#链接"><span class="nav-number">2.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装载"><span class="nav-number">3.</span> <span class="nav-text">装载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#呈现"><span class="nav-number">4.</span> <span class="nav-text">呈现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#插播"><span class="nav-number">5.</span> <span class="nav-text">插播</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dyld"><span class="nav-number">5.1.</span> <span class="nav-text">dyld</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整的编译流程如下"><span class="nav-number">5.2.</span> <span class="nav-text">完整的编译流程如下</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#main之后"><span class="nav-number">6.</span> <span class="nav-text">main之后</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行状态"><span class="nav-number">7.</span> <span class="nav-text">运行状态</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

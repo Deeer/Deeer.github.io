@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="Love,Dee" />
+  <meta name="keywords" content="Runtime," />
 
 
 
@@ -48,14 +48,12 @@
 
 
 
-  <title> Dee+'s Blog </title>
+  <title> runtime源码阅读 - Category // Dee+'s Blog </title>
 </head>
 
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
-  <div class="container one-column 
-   page-home 
-">
+  <div class="container one-column page-post-detail">
     <div class="headband"></div>
 
     <div id="header" class="header">
@@ -125,9 +123,9 @@
       <div class="main-inner">
         <div id="content" class="content">
           
+
   <div id="posts" class="posts-expand">
     
-      
 
   <div class="post post-type-normal ">
     <div class="post-header">
@@ -138,138 +136,7 @@
           
           
             
-              <a class="post-title-link" href="/2018/07/07/应用启动流程总览/">
-                应用启动流程总览
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-07-07
-        </span>
-
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><p>在编译之前，就进行词法和语法的分析，接着将源代码翻译成中间代码，也就是汇编语言。<br>编译程序工作时，会先分析，最后得到目标程序，所谓的分析也就是对词法和语法的分析。翻译成汇编，最后生成可执行文件</p>
-<h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h1><p>每个类都会被编译成不同的目标文件，链接器就是将每个文件串起来，相会调用，生成可执行文件（<code>Mach-O</code>格式）</p>
-<h1 id="装载"><a href="#装载" class="headerlink" title="装载"></a>装载</h1><p>把已生成的可执行文件放到操作系统的专属进程下，并找到机器可识别的汇编代码入口，开始按照汇编去执行机器码，并能与操作系统级别的API对接。</p>
-<h1 id="呈现"><a href="#呈现" class="headerlink" title="呈现"></a>呈现</h1><p>整个编译、链接、装载完成之后，就会回到<code>mian()</code>函数，清空之前的所有线程，并根据代码逻辑进行app展示</p>
-<hr>
-<h1 id="插播"><a href="#插播" class="headerlink" title="插播"></a>插播</h1><blockquote>
-<p>编译型语言 vs 解释型语言</p>
-</blockquote>
-<ul>
-<li><p>编译型语言有单独的编译过程</p>
-</li>
-<li><p>解释型语言在运行的时候将程序翻译成机器语言，速度相对较慢</p>
-</li>
-</ul>
-<p>##LLVM架构</p>
-<p><strong>传统的编译器</strong>分为三个部分：</p>
-<ul>
-<li><strong>前端</strong>：主要负责语法和词法，将源代码生成抽象代码树</li>
-<li><strong>优化器</strong>： 在前端基础上对代码进行优化</li>
-<li><strong>后端</strong>：将优化后的中间代码转为针对各个平台的机器代码</li>
-</ul>
-<p>如图<br><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ft1d6mzyv1j30d60243ye.jpg" alt=""></p>
-<p><a href="https://www.jianshu.com/p/9fc7776cce9b" target="_blank" rel="noopener">这里</a>是LLVM架构的概述</p>
-<blockquote>
-<p>LLVM &amp;&amp; Clang</p>
-</blockquote>
-<ul>
-<li><strong>LLVM</strong> ： 是架构编译器的框架系统，用C++写成。用以优化以任意语言编写的程序的编译时间，链接时间，运行时间及空闲时间。是一个完整的编译器架构，也可以认为是一个用于开发编译器、解释器的相关库</li>
-<li><strong>Clang</strong> ： C++ 编写，基于LLVMBSD许可证下的<code>C/C++/OC++</code>编译器前端（由<code>Apple</code>开发，源代码授权使用<code>BSD</code>的开源授权）</li>
-</ul>
-<h2 id="dyld"><a href="#dyld" class="headerlink" title="dyld"></a>dyld</h2><p><code>dyld</code>是<code>Apple</code>的动态链接库，这一步骤是在<strong>链接</strong>完成之后的生成了<code>Mach-O</code>的可执行文件后，系统已经做好了程序启动的准备，并将控制权交给了<code>dyld</code>。<code>dyld</code>主要负责初始化程序环境，将可执行文件和相应的依赖与库文件加载进内存生成对应的<code>ImageLoader</code>类（也就是镜像文件），对这些文件进行链接，最后调用每个依赖库的初始化方法。与此同时，对程序中的类进行类结构初始化，调用类和分类中的<code>load</code>方法。最后<code>dyld</code>返回<code>main</code>函数，并做清理工作，回归调用栈。</p>
-<h2 id="完整的编译流程如下"><a href="#完整的编译流程如下" class="headerlink" title="完整的编译流程如下"></a>完整的编译流程如下</h2><ul>
-<li>编译信息写入辅助文件，创建<code>.app</code>文件</li>
-<li>处理打包信息</li>
-<li>执行<code>CocoaPod</code>编译前脚本</li>
-<li>编译<code>.m</code>文件，使用<code>Compile</code>和<code>Clang</code>命令</li>
-<li>链接需要的<code>Framework</code></li>
-<li>编译<code>Xib</code></li>
-<li>拷贝<code>Xib</code>，资源文件</li>
-<li>编译<code>ImageAssets</code></li>
-<li>处理<code>info.plist</code></li>
-<li>执行<code>CocoaPod</code>脚本</li>
-<li>拷贝标准库</li>
-<li>创建<code>.app</code>文件和签名</li>
-</ul>
-<hr>
-<h1 id="main之后"><a href="#main之后" class="headerlink" title="main之后"></a>main之后</h1><blockquote>
-<p>main</p>
-</blockquote>
-<p>大致流程：</p>
-<ul>
-<li><code>main</code>函数</li>
-<li>执行<code>UIApplicationMain</code>函数</li>
-<li>创建<code>UIApplication</code>对象</li>
-<li>创建<code>UIApplicationDelegate</code>对象</li>
-<li>创建对应的<code>RunLoop</code>循环</li>
-<li><code>UIApplication</code>开始处理监听到的事件</li>
-<li>读取配置文件<code>info.plist</code>，设置程序启动的一些属性 </li>
-<li>如果<code>plist</code>文件中配置了<code>storyboard</code>文件名，则加载对应的<code>storyboard</code>文件，并根据这个文件中启动配置加载和现实窗口，显示对应的控件。</li>
-<li>如果没有配置，则根据<code>application:didFinishLaunchingWithOptions:</code>代码来创建<code>UIWindow</code></li>
-</ul>
-<blockquote>
-<p> UIApplication</p>
-</blockquote>
-<p>从进入<code>main()</code>方法之后，会创建一个<code>UIApplication</code>对象，他主要做以下几件事:<br>1.从<code>StoryBoard</code>文件加载用户界面<br>2.调用<code>AppDelegate</code>自定义代码类做一些初始化设置<br>3.将app放入<code>main Run Loop</code> 环境来响应和处理与用户交互产生的事件</p>
-<blockquote>
-<p>Main Run Loop </p>
-</blockquote>
-<p> 主要作用：处理所有与用户相关的事件。<code>UIApplication</code>对象在启动时就设置<code>Main Run Loop</code> 和使用他来处理和更新基于<code>view</code>的界面</p>
-<h1 id="运行状态"><a href="#运行状态" class="headerlink" title="运行状态"></a>运行状态</h1><p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1ft1e0ppxlnj30ft0hp0ta.jpg" alt=""></p>
-<p><strong>NotRun</strong> : 未运行<br><strong>InActive</strong> : 处于<code>Forground</code>状态，但不接收事件<br><strong>Active</strong> : 处于<code>Forground</code>状态，接收事件<br><strong>Background</strong> : 处于<code>Background</code>状态，执行代码<br><strong>Suspend</strong> : 处于<code>Background</code>状态，不执行代码</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2018/06/27/runtime源码阅读 - Category/">
-                runtime源码阅读 - Category
-              </a>
+              runtime源码阅读 - Category
             
           
         </h1>
@@ -305,8 +172,7 @@
       
 
       
-        
-          <h2 id="runtime源码阅读"><a href="#runtime源码阅读" class="headerlink" title="runtime源码阅读"></a>runtime源码阅读</h2><p>首先是对象的初始化</p>
+        <h2 id="runtime源码阅读"><a href="#runtime源码阅读" class="headerlink" title="runtime源码阅读"></a>runtime源码阅读</h2><p>首先是对象的初始化</p>
 <figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">  void _objcInit(void) &#123;</span><br><span class="line">	static int _done = <span class="number">0</span>;</span><br><span class="line">	int hidx;</span><br><span class="line">        <span class="comment">/* Protect against multiple invocations, as all library</span></span><br><span class="line"><span class="comment">         * initializers should. */</span></span><br><span class="line">        if (<span class="number">0</span> != _done) return;</span><br><span class="line">        _done = <span class="number">1</span>;</span><br><span class="line">	ptrace(<span class="number">0xb010</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);	<span class="comment">// marks call to _objcInit</span></span><br><span class="line">	__initialize_objc();</span><br><span class="line">	<span class="comment">/* We delay this until here, because dyld cannot detect and</span></span><br><span class="line"><span class="comment">	 * properly order calls to ObjC initializers amongst the</span></span><br><span class="line"><span class="comment">	 * calls to module and library initializers. */</span></span><br><span class="line">	for (hidx = <span class="number">0</span>; hidx &lt; header_count; hidx += <span class="number">1</span>)</span><br><span class="line">		_objc_call_loads_for_image (&amp;header_vector[hidx]);</span><br><span class="line">	ptrace(<span class="number">0xb01f</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);	<span class="comment">// marks call to _objcInit</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>首先是以下这段代码<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> _done = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> hidx;</span><br><span class="line">        <span class="comment">/* Protect against multiple invocations, as all library</span></span><br><span class="line"><span class="comment">         * initializers should. */</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> != _done) <span class="keyword">return</span>;</span><br><span class="line">        _done = <span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
 <p>正如他所写的，这个逻辑防止了被多次调用执行，保证了该方法只被执行一次。因为一旦第一次执行了，那么<code>_done</code>这个参数就会被赋值为1，之后调用就会直接<code>return</code></p>
@@ -354,268 +220,46 @@
 <p>总结： </p>
 <p>1.<code>dyld</code>在每次加载镜像的时候，都会调用回调方法，让系统生成类对应的<code>category</code>哈希表<br>2.每次对应添加方法时都会是分别添加对应的实例方法和类方法</p>
 
-        
       
     </div>
 
     <div class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/tags/Runtime/"> #Runtime </a>
+          
+        </div>
       
 
       
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/07/应用启动流程总览/">应用启动流程总览</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/25/加密相关（二）/">加密相关（二）</a>
+            
+          </div>
+        </div>
       
-        <div class="post-eof"></div>
+
+      
       
     </div>
   </div>
 
 
+
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2018/06/25/加密相关（二）/">
-                加密相关（二）
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-06-25
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/Read-iOS/">Read iOS</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
+      <div class="comments" id="comments">
         
       </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>基于第一篇文章的介绍，接下来我们来聊聊日常生活中的都会接触到的加密应用方式–<code>HTTPS</code></p>
-<h2 id="HTTP-vs-HTTPS"><a href="#HTTP-vs-HTTPS" class="headerlink" title="HTTP vs HTTPS"></a>HTTP vs HTTPS</h2><p><code>HTTP</code>全称<code>Hyper Text Transfer Protocal</code>(超文本传输协议)是万维网服务器传输超文本协议到本地浏览器的传送协议，是一个属于应用层的面向对象的协议。</p>
-<p><code>HTTPS</code>全称<code>Secure Hypertext Transfer Protocol</code>安全超文本传输协议。</p>
-<h2 id="SSL-or-TLS"><a href="#SSL-or-TLS" class="headerlink" title="SSL or TLS"></a>SSL or TLS</h2><p>在<code>HTTPS</code>中的<code>S</code>可以是<code>SSL</code>或者<code>TLS</code>。</p>
-<p><code>SSL</code>全称<code>Secure Socket Layer</code>安全套接字层，位于可靠的面向连接的网络协议和应用层协议层。<code>SSL</code>通过互相认证、使用数字证书保证完整性，使用加密确保私密性，以实现客户端和服务器之间的安全通讯。该协议由两层组成: <code>SSL</code>记录协议和<code>SSL</code>握手协议。<code>SSL</code>是<code>Netscape</code>开发的专门用于保护<code>Web</code>通讯的。</p>
-<p><code>TLS</code>全称<code>Transport Layer Security</code>安全传输层协议，用于两个应用之间提供保密性和数据完整性。该协议由两层组成:  <code>TSL</code>记录协议和<code>TSL</code>握手协议。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/06/25/加密相关（二）/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2018/06/02/setTimeout探索/">
-                setTimeout探索
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-06-02
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/FrontEnd/">FrontEnd</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><blockquote>
-<p>并发&amp;&amp;并行</p>
-</blockquote>
-<p><strong>并发多线程</strong> : <code>ConCurrency</code> , 实质就是一个物理的<code>CPU</code>在若干个程序之间复用，由于每次切换执行程序的时间极短，所以一般用户无法察觉，即认为是多个应用在同时执行。<br><strong>并行多线程</strong> : <code>Paralleism</code> , 指两个或两个以上的事件在同一时刻发生，是真正意义上的不同事件在同一个时刻发送。</p>
-<blockquote>
-<p>JS线程</p>
-</blockquote>
-<p>浏览器内核是多线程的，在一般情况下，会保留至少三个基本线程：<strong>JS引擎线程</strong>、<strong>GUI渲染线程</strong>、<strong>浏览器事件触发线程</strong></p>
-<p><strong>JS引擎线程</strong>: 基于事件执行，单线程处理，意味着任务都是一个接一个顺序执行的。<br><strong>GUI渲染线程</strong>: 负责渲染浏览器界面<br><strong>浏览器事件触发线程</strong>: 当一个事件触发时该线程会把事件添加到<code>JS引擎线程</code>的待处理队列的队尾中</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/06/02/setTimeout探索/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2018/05/23/加密相关（一）/">
-                加密相关（一）
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-05-23
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/Read/">Read</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>前言：<br> <strong>这会是一篇主讲加密相关的文章，希望能在一定程度上理清日常使用的加密概念。</strong></p>
-</blockquote>
-<h3 id="对称加密与非对称加密"><a href="#对称加密与非对称加密" class="headerlink" title="对称加密与非对称加密"></a>对称加密与非对称加密</h3><p>首先，现有的加密技术分为两种，一种叫<code>对称加密</code>，即在加密和解密的时候使用的是同一个密钥。另一种叫<code>非对称加密</code>，这种加密技术中，存在两个概念—私钥和公钥。私钥一般是指，用于加密原文的不向外界透露的密钥。公钥则想法，一般是指向外界透露的，用于解密的密钥。其中公钥和私钥是一一对应关系，即只有私钥对应的公钥才能解密私钥加密的密文</p>
-<hr>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/05/23/加密相关（一）/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-  </div>
-
-  
-  <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
   </div>
 
 
@@ -638,6 +282,15 @@
   <div id="sidebar" class="sidebar">
     <div class="sidebar-inner">
 
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
       
 
       <div class="site-overview">
@@ -699,6 +352,17 @@
       </div>
 
       
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#runtime源码阅读"><span class="nav-number">1.</span> <span class="nav-text">runtime源码阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#category-部分"><span class="nav-number">2.</span> <span class="nav-text">category 部分</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
 
     </div>
   </div>
@@ -759,6 +423,145 @@
 
 
   
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
 
   <script type="text/javascript">
     $(document).ready(function () {
