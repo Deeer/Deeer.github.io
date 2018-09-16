@@ -79,7 +79,7 @@
       <li class="menu-item menu-item-home">
         <a href="/">
           <i class="menu-item-icon icon-home"></i> <br />
-          Home
+          首页
         </a>
       </li>
     
@@ -87,7 +87,7 @@
       <li class="menu-item menu-item-categories">
         <a href="/categories">
           <i class="menu-item-icon icon-categories"></i> <br />
-          Categories
+          分类
         </a>
       </li>
     
@@ -95,7 +95,7 @@
       <li class="menu-item menu-item-archives">
         <a href="/archives">
           <i class="menu-item-icon icon-archives"></i> <br />
-          Archives
+          归档
         </a>
       </li>
     
@@ -103,7 +103,7 @@
       <li class="menu-item menu-item-tags">
         <a href="/tags">
           <i class="menu-item-icon icon-tags"></i> <br />
-          Tags
+          标签
         </a>
       </li>
     
@@ -111,7 +111,7 @@
       <li class="menu-item menu-item-about">
         <a href="/about">
           <i class="menu-item-icon icon-about"></i> <br />
-          About
+          关于
         </a>
       </li>
     
@@ -148,12 +148,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2018-09-16
+          发表于 2018-09-16
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; In
+            &nbsp; | &nbsp; 分类于
             
               <a href="/categories/ScourceCode/">ScourceCode</a>
 
@@ -183,7 +183,7 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">block_impl</span> &#123;</span></span><br><span class="line">  <span class="keyword">void</span> *isa;</span><br><span class="line">  <span class="keyword">int</span> Flags;</span><br><span class="line">  <span class="keyword">int</span> Reserved;</span><br><span class="line">  <span class="keyword">void</span> *FuncPtr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">main_block_impl_0</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">block_impl</span> <span class="title">impl</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">main_block_desc_0</span>* <span class="title">Desc</span>;</span></span><br><span class="line"></span><br><span class="line">  __main_block_impl_0(<span class="keyword">void</span> *fp, struct __main_block_desc_0 *desc, <span class="keyword">int</span> flags=<span class="number">0</span>) &#123;</span><br><span class="line">    impl.isa = &amp;_NSConcreteStackBlock;</span><br><span class="line">    impl.Flags = flags;</span><br><span class="line">    impl.FuncPtr = fp;</span><br><span class="line">    Desc = desc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> __main_block_func_0(struct __main_block_impl_0 *__cself) &#123;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"ss"</span>);&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> __<span class="title">main_block_desc_0</span> &#123;</span></span><br><span class="line">  <span class="keyword">size_t</span> reserved;</span><br><span class="line">  <span class="keyword">size_t</span> Block_size;</span><br><span class="line">&#125; __main_block_desc_0_DATA = &#123; <span class="number">0</span>, <span class="keyword">sizeof</span>(struct __main_block_impl_0)&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> (*blk)(<span class="keyword">void</span>) = ((<span class="keyword">void</span> (*)())&amp;__main_block_impl_0((<span class="keyword">void</span> *)__main_block_func_0, &amp;__main_block_desc_0_DATA));</span><br><span class="line"></span><br><span class="line">    ((<span class="keyword">void</span> (*)(__block_impl *))((__block_impl *)blk)-&gt;FuncPtr)((__block_impl *)blk);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/09/16/block深入分析/#more">
-              Read more &raquo;
+              阅读全文 &raquo;
             </a>
           </div>
         
@@ -225,12 +225,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2018-07-21
+          发表于 2018-07-21
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; In
+            &nbsp; | &nbsp; 分类于
             
               <a href="/categories/ScourceCode/">ScourceCode</a>
 
@@ -259,7 +259,7 @@
 <p>代码中我们能看到，系统在查找时也会去判断是否已经加载过，如果没有则在加载钱调用递归互斥锁，防止引起<code>I/O</code>问题。<br>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/07/21/RunTime-之-load/#more">
-              Read more &raquo;
+              阅读全文 &raquo;
             </a>
           </div>
         
@@ -301,12 +301,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2018-07-07
+          发表于 2018-07-07
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; In
+            &nbsp; | &nbsp; 分类于
             
               <a href="/categories/APP/">APP</a>
 
@@ -337,7 +337,7 @@
 <h2 id=""><a href="#" class="headerlink" title="  "></a>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/07/07/应用启动流程总览/#more">
-              Read more &raquo;
+              阅读全文 &raquo;
             </a>
           </div>
         
@@ -379,12 +379,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2018-06-25
+          发表于 2018-06-25
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; In
+            &nbsp; | &nbsp; 分类于
             
               <a href="/categories/Read-iOS/">Read iOS</a>
 
@@ -413,10 +413,10 @@
 <p><code>HTTPS</code>全称<code>Secure Hypertext Transfer Protocol</code>安全超文本传输协议。</p>
 <h2 id="SSL-or-TLS"><a href="#SSL-or-TLS" class="headerlink" title="SSL or TLS"></a>SSL or TLS</h2><p>在<code>HTTPS</code>中的<code>S</code>可以是<code>SSL</code>或者<code>TLS</code>。</p>
 <p><code>SSL</code>全称<code>Secure Socket Layer</code>安全套接字层，位于可靠的面向连接的网络协议和应用层协议层。<code>SSL</code>通过互相认证、使用数字证书保证完整性，使用加密确保私密性，以实现客户端和服务器之间的安全通讯。该协议由两层组成: <code>SSL</code>记录协议和<code>SSL</code>握手协议。<code>SSL</code>是<code>Netscape</code>开发的专门用于保护<code>Web</code>通讯的。</p>
-<p><code>TLS</code>全称<code>Transport Layer Security</code>安全传输层协议，用于两个应用之间提供保密性和数据完整性。该协议由两层组成:  <code>TSL</code>记录协议和<code>TSL</code>握手协议。<br>
+<p><code>TLS</code>全称<code>Transport Layer Security</code>安全传输层协议，用于两个应用之间提供保密性和数据完整性。该协议由两层组成:  <code>TLS</code>记录协议和<code>TLS</code>握手协议。<br>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/06/25/加密相关（二）/#more">
-              Read more &raquo;
+              阅读全文 &raquo;
             </a>
           </div>
         
@@ -458,12 +458,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2018-06-02
+          发表于 2018-06-02
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; In
+            &nbsp; | &nbsp; 分类于
             
               <a href="/categories/FrontEnd/">FrontEnd</a>
 
@@ -498,7 +498,7 @@
 <p><strong>JS引擎线程</strong>: 基于事件执行，单线程处理，意味着任务都是一个接一个顺序执行的。<br><strong>GUI渲染线程</strong>: 负责渲染浏览器界面<br><strong>浏览器事件触发线程</strong>: 当一个事件触发时该线程会把事件添加到<code>JS引擎线程</code>的待处理队列的队尾中</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/06/02/setTimeout探索/#more">
-              Read more &raquo;
+              阅读全文 &raquo;
             </a>
           </div>
         
@@ -558,21 +558,21 @@
           <div class="site-state-item site-state-posts">
             <a href="/archives">
               <span class="site-state-item-count">16</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
               <span class="site-state-item-count">9</span>
-              <span class="site-state-item-name">categories</span>
+              <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
               <span class="site-state-item-count">13</span>
-              <span class="site-state-item-name">tags</span>
+              <span class="site-state-item-name">标签</span>
               </a>
           </div>
 
@@ -627,11 +627,11 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
-  Theme -
+  主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Mist
   </a>
