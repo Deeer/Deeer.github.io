@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="Encryption," />
+  <meta name="keywords" content="Hash," />
 
 
 
@@ -48,7 +48,7 @@
 
 
 
-  <title> 加密相关（一） // Dee+'s Blog </title>
+  <title> Hash基本理解 // Dee+'s Blog </title>
 </head>
 
 <body>
@@ -136,7 +136,7 @@
           
           
             
-              加密相关（一）
+              Hash基本理解
             
           
         </h1>
@@ -144,14 +144,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2018-05-23
+          Posted on 2018-11-03
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; In
             
-              <a href="/categories/Read/">Read</a>
+              <a href="/categories/SomeConcept/">SomeConcept</a>
 
               
               
@@ -172,38 +172,36 @@
       
 
       
-        <blockquote>
-<p>前言：<br> <strong>这会是一篇主讲加密相关的文章，希望能在一定程度上理清日常使用的加密概念。</strong></p>
-</blockquote>
-<h3 id="对称加密与非对称加密"><a href="#对称加密与非对称加密" class="headerlink" title="对称加密与非对称加密"></a>对称加密与非对称加密</h3><p>首先，现有的加密技术分为两种，一种叫<code>对称加密</code>，即在加密和解密的时候使用的是同一个密钥。另一种叫<code>非对称加密</code>，这种加密技术中，存在两个概念—私钥和公钥。私钥一般是指，用于加密原文的不向外界透露的密钥。公钥则想法，一般是指向外界透露的，用于解密的密钥。其中公钥和私钥是一一对应关系，即只有私钥对应的公钥才能解密私钥加密的密文</p>
-<hr>
- <a id="more"></a> 
-<h3 id="单向散列函数"><a href="#单向散列函数" class="headerlink" title="单向散列函数"></a>单向散列函数</h3><p>他是对原文的信息提炼，通常长度比原文小，且具有<strong>固定的长度</strong>，<strong>不可逆</strong>等特点。对于改变输入值中的任何一个字符，都会得到一个截然不同的结果，这种雪崩效应，对于信息验证来说再好不过了。所以单向散列函数常用于消息摘要、密钥加密等。比较为人熟知的有MD5、SHA等</p>
-<hr>
-<h3 id="消息认证码-–-Message-authentication-code"><a href="#消息认证码-–-Message-authentication-code" class="headerlink" title="消息认证码 – Message authentication code"></a>消息认证码 – Message authentication code</h3><p>他是一种确认完整性的的技术，缩写<code>MAC</code>。消息认证码输入的是<strong>任意长度的消息</strong>和一个<strong>发送者与接收者共享的密钥</strong>，输出的固定长度的数据，就叫<strong>MAC值</strong></p>
-<p>可以用于确定消息是否被改动，同时能确认消息是否来自期待的通信对象，因为<strong>密钥是共享的</strong>。</p>
-<hr>
-<h3 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h3><p>数字签名是前加密技术的组合应用。首先，将消息生成散列值，并用私钥进行加密，最后将原文、公钥和密文一起发送给对方。当接收方拿到数据后，可以通过公钥解密得到密文，再将原文进行散列运算，最后比较两者的吻合度即可验证数据的完整性和有效性。</p>
-<hr>
-<h3 id="CA证书"><a href="#CA证书" class="headerlink" title="CA证书"></a>CA证书</h3><p><code>CA</code>证书，又称数字证书，他由权威机构给某个网站颁发的一种认可凭证。这个凭证能告诉大家（浏览器）所认可的，在访问的网站的时候，会验证该站点上的CA证书，如果浏览器发现该证书没有问题，那么就可以直接打开，否则的话，浏览器就会发出警告，告诉你该网站的证书存在问题，是否继续访问该站点。</p>
-<p>在<code>HTTP</code>中，<code>SSL</code>（<code>Secure Sockets Layer</code>）作为在传输层的上网络连接加密层，我们可以形象理解他为一传输通道加密，而<code>CA</code>证书则是对传输双方提供一种点对点的加密方式。</p>
-<hr>
-<h2 id="常见使用案例"><a href="#常见使用案例" class="headerlink" title="常见使用案例"></a>常见使用案例</h2><blockquote>
-<p>对称加密算法  </p>
-</blockquote>
-<p>  <code>AES</code> :  加密和解密都使用同一个密钥</p>
-<p>  <code>DES</code> : 速度快，适用加密大量数据场合</p>
-<p>  <code>3DES</code> : 加密强度更高</p>
+        <h2 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h2><p>hash 表有称散列表，是一种通过关键值key访问对应的value的映射数据结构。<br>根据WIKI的定义</p>
 <blockquote>
-<p>非对称加密算法</p>
+<p><strong>散列表（Hash Table，也叫哈希表）</strong>是根据键（key）而直接访问在内存存储位置的数据结构。也就是说，它是通过计算一个关于键值的函数，将所需查询的数据映射到表中一个位置类访问记录，加快了查找速度，这个映射函数称为<strong>散列函数</strong>，存放记录的表，叫散列表。</p>
 </blockquote>
-<p>  <code>RSA</code> : 公钥私钥一对一，并且相互无法反推</p>
+<p>首先假设我们有10000条数据，为了方便能快速查找我们需要的数据。我们尝试将它放在一个hash表中。<br>一开始我们能想到的是，将这个10000条数据通过一定的算法处理得到对应的key，然后将这个key和数据绑定在一起，存放在一个集合中。<br>这样以来我们想访问某条数据，我们只需要知道key值即可直接访问，在一定程度上，一个key值就代表一条数据。从数据存储角度讲，这样的做法，大大降低了<br>内存的使用。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwu752bggoj30jk0hp74u.jpg" alt=""></p>
+<p>然而，在很多时候，事情并没有我们想象的那么简单。一个值得注意的一点就是，这个hash算法的结果可能出现冲突。<br>也就是说，不同的两条数据经过算法处理之后，得到的是<strong>一样的key值</strong>，这也就是我们常说的<strong>哈希冲突</strong>。</p>
+<p>在一些文章中，对于哈希表的实现方式是这样介绍的</p>
 <blockquote>
-<p>单向散列函数</p>
+<p>哈希表的做法其实很简单，就是把key通过一个固定的算法函数即所谓的哈希函数转换成一个整型数字，然后就将该数组对数组长度进行取余，取余结果就当作数组的下标，将value储存在以该数字为下标的数组空间里。</p>
 </blockquote>
-<p>  <code>MD5</code> :  不可逆，但相同数据的MD5值相同,值定长,可以用库撞出结果</p>
-<p>  <code>BASE64</code> : 准确说，<code>BASE64</code>不算加密，而是给内容转换编码，让人不能一眼就能看出内容。</p>
-<p>  <code>SHA</code> : <code>Secure Hash Algorithm</code>，是一个大家族，其中成员包括<code>SHA-1</code>、<code>SHA-224</code>、<code>SHA-256</code>、<code>SHA-384</code>，和<code>SHA-512</code></p>
+<p>笔者认为这仅仅是hash实现的的一种方式，本质上是一样的，key值可以是整数意外的类型，如字符串等。所以在我们其实可以理解的更宽泛一些。</p>
+<p>看了很多博客文章，似乎哈希函数最终都将传入的key转化为一个整型值，这个整型值就是value在哈希表中的位置。</p>
+<p>这也就意味着，在哈希表中value并不直接对应key，而是key经过哈希函数处理后的值。一般情况下都是最终转换为整型地址，最后通过这个整型地址找到对应的元素。</p>
+<h3 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h3><p>接下里我们来了解一下哈希冲突的几种方式</p>
+<ul>
+<li><ol>
+<li>开放地址法。</li>
+</ol>
+</li>
+</ul>
+<p>这种方式是当发生冲突时，以之前计算出的index值继续产生index值，直到不发生冲突，即可将相应的元素存入其中。</p>
+<ul>
+<li><ol>
+<li>拉链法<br>又称链地址法，原理是如果遇到冲突，就直接放在对应的index节点下，然后以链表的形式插入。</li>
+</ol>
+</li>
+</ul>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwu75b54ulj30jk0cgaac.jpg" alt=""></p>
+<p>在这种情况下，我们要使用的哈希函数需要尽量的将value平均分布，这样有利于查找。在最坏的情况下，所有的value都被保存在同一个链表中，这样显然失去了使用哈希表的意义。</p>
 
       
     </div>
@@ -212,7 +210,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Encryption/"> #Encryption </a>
+            <a href="/tags/Hash/"> #Hash </a>
           
         </div>
       
@@ -221,13 +219,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/06/02/setTimeout探索/">setTimeout探索</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/12/autoreleasepool分析/">autoreleasepool分析</a>
+              <a href="/2018/09/16/block深入分析/">Block深入分析</a>
             
           </div>
         </div>
@@ -342,7 +338,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#对称加密与非对称加密"><span class="nav-number">1.</span> <span class="nav-text">对称加密与非对称加密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单向散列函数"><span class="nav-number">2.</span> <span class="nav-text">单向散列函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息认证码-–-Message-authentication-code"><span class="nav-number">3.</span> <span class="nav-text">消息认证码 – Message authentication code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数字签名"><span class="nav-number">4.</span> <span class="nav-text">数字签名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CA证书"><span class="nav-number">5.</span> <span class="nav-text">CA证书</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见使用案例"><span class="nav-number"></span> <span class="nav-text">常见使用案例</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash"><span class="nav-number">1.</span> <span class="nav-text">Hash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#冲突解决"><span class="nav-number">1.1.</span> <span class="nav-text">冲突解决</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
