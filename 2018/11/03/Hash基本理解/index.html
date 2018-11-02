@@ -77,7 +77,7 @@
       <li class="menu-item menu-item-home">
         <a href="/">
           <i class="menu-item-icon icon-home"></i> <br />
-          Home
+          首页
         </a>
       </li>
     
@@ -85,7 +85,7 @@
       <li class="menu-item menu-item-categories">
         <a href="/categories">
           <i class="menu-item-icon icon-categories"></i> <br />
-          Categories
+          分类
         </a>
       </li>
     
@@ -93,7 +93,7 @@
       <li class="menu-item menu-item-archives">
         <a href="/archives">
           <i class="menu-item-icon icon-archives"></i> <br />
-          Archives
+          归档
         </a>
       </li>
     
@@ -101,7 +101,7 @@
       <li class="menu-item menu-item-tags">
         <a href="/tags">
           <i class="menu-item-icon icon-tags"></i> <br />
-          Tags
+          标签
         </a>
       </li>
     
@@ -109,7 +109,7 @@
       <li class="menu-item menu-item-about">
         <a href="/about">
           <i class="menu-item-icon icon-about"></i> <br />
-          About
+          关于
         </a>
       </li>
     
@@ -144,12 +144,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2018-11-03
+          发表于 2018-11-03
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; In
+            &nbsp; | &nbsp; 分类于
             
               <a href="/categories/SomeConcept/">SomeConcept</a>
 
@@ -186,7 +186,7 @@
 <p>笔者认为这仅仅是hash实现的的一种方式，本质上是一样的，key值可以是整数意外的类型，如字符串等。所以在我们其实可以理解的更宽泛一些。</p>
 <p>看了很多博客文章，似乎哈希函数最终都将传入的key转化为一个整型值，这个整型值就是value在哈希表中的位置。</p>
 <p>这也就意味着，在哈希表中value并不直接对应key，而是key经过哈希函数处理后的值。一般情况下都是最终转换为整型地址，最后通过这个整型地址找到对应的元素。</p>
-<h3 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h3><p>接下里我们来了解一下哈希冲突的几种方式</p>
+<h2 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h2><p>接下里我们来了解一下哈希冲突的几种方式</p>
 <ul>
 <li><ol>
 <li>开放地址法。</li>
@@ -218,6 +218,8 @@
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/03/test/">test</a>
             
           </div>
 
@@ -266,10 +268,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table Of Contents
+            文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
+            站点概览
           </li>
         </ul>
       
@@ -283,22 +285,22 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
               <span class="site-state-item-count">10</span>
-              <span class="site-state-item-name">categories</span>
+              <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
               <span class="site-state-item-count">14</span>
-              <span class="site-state-item-name">tags</span>
+              <span class="site-state-item-name">标签</span>
               </a>
           </div>
 
@@ -338,7 +340,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash"><span class="nav-number">1.</span> <span class="nav-text">Hash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#冲突解决"><span class="nav-number">1.1.</span> <span class="nav-text">冲突解决</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash"><span class="nav-number">1.</span> <span class="nav-text">Hash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#冲突解决"><span class="nav-number">2.</span> <span class="nav-text">冲突解决</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -364,11 +366,11 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
-  Theme -
+  主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Mist
   </a>
