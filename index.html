@@ -79,7 +79,7 @@
       <li class="menu-item menu-item-home">
         <a href="/">
           <i class="menu-item-icon icon-home"></i> <br />
-          首页
+          Home
         </a>
       </li>
     
@@ -87,7 +87,7 @@
       <li class="menu-item menu-item-categories">
         <a href="/categories">
           <i class="menu-item-icon icon-categories"></i> <br />
-          分类
+          Categories
         </a>
       </li>
     
@@ -95,7 +95,7 @@
       <li class="menu-item menu-item-archives">
         <a href="/archives">
           <i class="menu-item-icon icon-archives"></i> <br />
-          归档
+          Archives
         </a>
       </li>
     
@@ -103,7 +103,7 @@
       <li class="menu-item menu-item-tags">
         <a href="/tags">
           <i class="menu-item-icon icon-tags"></i> <br />
-          标签
+          Tags
         </a>
       </li>
     
@@ -111,7 +111,7 @@
       <li class="menu-item menu-item-about">
         <a href="/about">
           <i class="menu-item-icon icon-about"></i> <br />
-          关于
+          About
         </a>
       </li>
     
@@ -138,8 +138,8 @@
           
           
             
-              <a class="post-title-link" href="/2018/11/03/test/">
-                test
+              <a class="post-title-link" href="/2018/11/07/weak源码分析/">
+                weak源码分析
               </a>
             
           
@@ -148,9 +148,20 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-11-03
+          Posted on 2018-11-07
         </span>
 
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/ScourceCode/">ScourceCode</a>
+
+              
+              
+
+            
+          </span>
         
 
         
@@ -166,8 +177,17 @@
 
       
         
-          <pre><code>asdasd
-</code></pre>
+          <h1 id="Weak源码分析"><a href="#Weak源码分析" class="headerlink" title="Weak源码分析"></a>Weak源码分析</h1><p>为了后期解释起来更为流畅，我们先看一些相关的概念，方便后期解读源码时能<br>无缝对接</p>
+<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><h3 id="SideTables"><a href="#SideTables" class="headerlink" title="SideTables"></a>SideTables</h3><p><code>SideTabels</code>是一个<code>64</code>位长度的<code>hash</code>数组.<br>我们来看下具体的实现方式</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> StripedMap&lt;SideTable&gt;&amp; SideTables() &#123;</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">reinterpret_cast</span>&lt;StripedMap&lt;SideTable&gt;*&gt;(SideTableBuf);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看到<code>SideTables</code>本质上<code>StripedMap</code>类型。其中包含的元素为SideTable类型</p>
+<p>这里的<code>reinterpret_cast</code>关键字，我们可以理解为强制类型转换，也就是将<code>SideTableBuf</code>转换为<br><code>StripedMap</code>类型，其中包含的元素为<code>SideTale</code>类型。<br>我们进一步查看<code>StriedMap</code>的结构</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">emplate&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StripedMap</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">enum</span> &#123; CacheLineSize = <span class="number">64</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> TARGET_OS_EMBEDDED</span></span><br><span class="line">    <span class="keyword">enum</span> &#123; StripeCount = <span class="number">8</span> &#125;;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">    <span class="keyword">enum</span> &#123; StripeCount = <span class="number">64</span> &#125;;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">PaddedT</span> &#123;</span></span><br><span class="line">        <span class="function">T value <span class="title">alignas</span><span class="params">(CacheLineSize)</span></span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    PaddedT <span class="built_in">array</span>[StripeCount];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">indexForPointer</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *p)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 将p的值以二进制的方式解释为uintptr_t（unsigned long）并赋值给addr</span></span><br><span class="line">        <span class="comment">// 保证具有相同的比特位</span></span><br><span class="line">        <span class="keyword">uintptr_t</span> addr = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">uintptr_t</span>&gt;(p);</span><br><span class="line">        <span class="comment">// addr / 2^4           addr / 2^9</span></span><br><span class="line">        <span class="comment">// % StripeCount 保证index不会越界</span></span><br><span class="line">        <span class="keyword">return</span> ((addr &gt;&gt; <span class="number">4</span>) ^ (addr &gt;&gt; <span class="number">9</span>)) % StripeCount;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 锁操作放在了类模版中</span></span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 重载操作符</span></span><br><span class="line">    T&amp; <span class="keyword">operator</span>[] (<span class="keyword">const</span> <span class="keyword">void</span> *p) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">array</span>[indexForPointer(p)].value; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> T&amp; <span class="keyword">operator</span>[] (<span class="keyword">const</span> <span class="keyword">void</span> *p) <span class="keyword">const</span> &#123; </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">const_cast</span>&lt;StripedMap&lt;T&gt;&gt;(<span class="keyword">this</span>)[p]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Shortcuts for StripedMaps of locks.</span></span><br><span class="line">    <span class="comment">// 锁操作</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lockAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; StripeCount; i++) &#123;</span><br><span class="line">            <span class="built_in">array</span>[i].value.lock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unlockAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; StripeCount; i++) &#123;</span><br><span class="line">            <span class="built_in">array</span>[i].value.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">forceResetAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; StripeCount; i++) &#123;</span><br><span class="line">            <span class="built_in">array</span>[i].value.forceReset();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">defineLockOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt; StripeCount; i++) &#123;</span><br><span class="line">            lockdebug_lock_precedes_lock(&amp;<span class="built_in">array</span>[i<span class="number">-1</span>].value, &amp;<span class="built_in">array</span>[i].value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">precedeLock</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *newlock)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// assumes defineLockOrder is also called</span></span><br><span class="line">        lockdebug_lock_precedes_lock(&amp;<span class="built_in">array</span>[StripeCount<span class="number">-1</span>].value, newlock);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">succeedLock</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *oldlock)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// assumes defineLockOrder is also called</span></span><br><span class="line">        lockdebug_lock_precedes_lock(oldlock, &amp;<span class="built_in">array</span>[<span class="number">0</span>].value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">const</span> <span class="keyword">void</span> *<span class="title">getLock</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; StripeCount) <span class="keyword">return</span> &amp;<span class="built_in">array</span>[i].value;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> nil;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> DEBUG</span></span><br><span class="line">    StripedMap() &#123;</span><br><span class="line">        <span class="comment">// Verify alignment expectations.</span></span><br><span class="line">        <span class="keyword">uintptr_t</span> base = (<span class="keyword">uintptr_t</span>)&amp;<span class="built_in">array</span>[<span class="number">0</span>].value;</span><br><span class="line">        <span class="keyword">uintptr_t</span> delta = (<span class="keyword">uintptr_t</span>)&amp;<span class="built_in">array</span>[<span class="number">1</span>].value - base;</span><br><span class="line">        assert(delta % CacheLineSize == <span class="number">0</span>);</span><br><span class="line">        assert(base % CacheLineSize == <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/11/07/weak源码分析/#more">
+              Read more &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -207,12 +227,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-11-03
+          Posted on 2018-11-03
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; 分类于
+            &nbsp; | &nbsp; In
             
               <a href="/categories/SomeConcept/">SomeConcept</a>
 
@@ -252,17 +272,11 @@
 <p>这也就意味着，在哈希表中value并不直接对应key，而是key经过哈希函数处理后的值。一般情况下都是最终转换为整型地址，最后通过这个整型地址找到对应的元素。</p>
 <h2 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h2><p>接下里我们来了解一下哈希冲突的几种方式</p>
 <ul>
-<li><ol>
 <li>开放地址法。</li>
-</ol>
-</li>
 </ul>
 <p>这种方式是当发生冲突时，以之前计算出的index值继续产生index值，直到不发生冲突，即可将相应的元素存入其中。</p>
 <ul>
-<li><ol>
 <li>拉链法<br>又称链地址法，原理是如果遇到冲突，就直接放在对应的index节点下，然后以链表的形式插入。</li>
-</ol>
-</li>
 </ul>
 <p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwu75b54ulj30jk0cgaac.jpg" alt=""></p>
 <p>在这种情况下，我们要使用的哈希函数需要尽量的将value平均分布，这样有利于查找。在最坏的情况下，所有的value都被保存在同一个链表中，这样显然失去了使用哈希表的意义。</p>
@@ -306,12 +320,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-09-16
+          Posted on 2018-09-16
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; 分类于
+            &nbsp; | &nbsp; In
             
               <a href="/categories/ScourceCode/">ScourceCode</a>
 
@@ -341,7 +355,7 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">block_impl</span> &#123;</span></span><br><span class="line">  <span class="keyword">void</span> *isa;</span><br><span class="line">  <span class="keyword">int</span> Flags;</span><br><span class="line">  <span class="keyword">int</span> Reserved;</span><br><span class="line">  <span class="keyword">void</span> *FuncPtr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">main_block_impl_0</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">block_impl</span> <span class="title">impl</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">main_block_desc_0</span>* <span class="title">Desc</span>;</span></span><br><span class="line"></span><br><span class="line">  __main_block_impl_0(<span class="keyword">void</span> *fp, struct __main_block_desc_0 *desc, <span class="keyword">int</span> flags=<span class="number">0</span>) &#123;</span><br><span class="line">    impl.isa = &amp;_NSConcreteStackBlock;</span><br><span class="line">    impl.Flags = flags;</span><br><span class="line">    impl.FuncPtr = fp;</span><br><span class="line">    Desc = desc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> __main_block_func_0(struct __main_block_impl_0 *__cself) &#123;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"ss"</span>);&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> __<span class="title">main_block_desc_0</span> &#123;</span></span><br><span class="line">  <span class="keyword">size_t</span> reserved;</span><br><span class="line">  <span class="keyword">size_t</span> Block_size;</span><br><span class="line">&#125; __main_block_desc_0_DATA = &#123; <span class="number">0</span>, <span class="keyword">sizeof</span>(struct __main_block_impl_0)&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> (*blk)(<span class="keyword">void</span>) = ((<span class="keyword">void</span> (*)())&amp;__main_block_impl_0((<span class="keyword">void</span> *)__main_block_func_0, &amp;__main_block_desc_0_DATA));</span><br><span class="line"></span><br><span class="line">    ((<span class="keyword">void</span> (*)(__block_impl *))((__block_impl *)blk)-&gt;FuncPtr)((__block_impl *)blk);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/09/16/block深入分析/#more">
-              阅读全文 &raquo;
+              Read more &raquo;
             </a>
           </div>
         
@@ -383,12 +397,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-07-21
+          Posted on 2018-07-21
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; 分类于
+            &nbsp; | &nbsp; In
             
               <a href="/categories/ScourceCode/">ScourceCode</a>
 
@@ -417,7 +431,7 @@
 <p>代码中我们能看到，系统在查找时也会去判断是否已经加载过，如果没有则在加载钱调用递归互斥锁，防止引起<code>I/O</code>问题。<br>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/07/21/RunTime-之-load/#more">
-              阅读全文 &raquo;
+              Read more &raquo;
             </a>
           </div>
         
@@ -459,12 +473,12 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-07-07
+          Posted on 2018-07-07
         </span>
 
         
           <span class="post-category">
-            &nbsp; | &nbsp; 分类于
+            &nbsp; | &nbsp; In
             
               <a href="/categories/APP/">APP</a>
 
@@ -495,7 +509,7 @@
 <h2 id=""><a href="#" class="headerlink" title="  "></a>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/07/07/应用启动流程总览/#more">
-              阅读全文 &raquo;
+              Read more &raquo;
             </a>
           </div>
         
@@ -555,21 +569,21 @@
           <div class="site-state-item site-state-posts">
             <a href="/archives">
               <span class="site-state-item-count">18</span>
-              <span class="site-state-item-name">日志</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
               <span class="site-state-item-count">10</span>
-              <span class="site-state-item-name">分类</span>
+              <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">14</span>
-              <span class="site-state-item-name">标签</span>
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">tags</span>
               </a>
           </div>
 
@@ -624,11 +638,11 @@
 </div>
 
 <div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
-  主题 -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Mist
   </a>
