@@ -1171,7 +1171,7 @@ input.menu-search-input {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #d4ff63;
+  background: #8ff113;
 }
 .sidebar-nav {
   margin: 0;
@@ -1274,7 +1274,6 @@ input.menu-search-input {
   margin-right: 10px;
 }
 .powered-by::after {
-  content: "|";
   padding-left: 10px;
 }
 .cc-license {
