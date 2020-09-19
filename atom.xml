@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>🦖 Deeer👨‍💻</title>
+  <title>🦖 Deeer</title>
   <icon>https://www.gravatar.com/avatar/9ec463cf5332e6bd2a44e71301afafd3</icon>
   <subtitle>士不可以不弘毅，任重而道远。</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deeer.github.io/"/>
-  <updated>2020-09-19T11:07:50.228Z</updated>
+  <updated>2020-09-19T13:54:21.652Z</updated>
   <id>http://deeer.github.io/</id>
   
   <author>
@@ -21,24 +21,23 @@
     <link href="http://deeer.github.io/2017/12/10/%E5%9B%BE%E5%83%8F%E7%9B%B8%E5%85%B3/"/>
     <id>http://deeer.github.io/2017/12/10/图像相关/</id>
     <published>2017-12-10T05:42:33.000Z</published>
-    <updated>2020-09-19T11:07:50.228Z</updated>
+    <updated>2020-09-19T13:54:21.652Z</updated>
     
-    <content type="html"><![CDATA[<p>Hi</p>]]></content>
+    <content type="html"><![CDATA[<h5 id="彩色空间"><a href="#彩色空间" class="headerlink" title="彩色空间"></a>彩色空间</h5><h4 id="像素"><a href="#像素" class="headerlink" title="像素"></a>像素</h4><h4 id="色域"><a href="#色域" class="headerlink" title="色域"></a>色域</h4><h2 id="位图"><a href="#位图" class="headerlink" title="位图"></a>位图</h2><h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><h4 id="压缩方式"><a href="#压缩方式" class="headerlink" title="压缩方式"></a>压缩方式</h4><h2 id="解码"><a href="#解码" class="headerlink" title="解码"></a>解码</h2><p>将经过编码的图像格式转换为可进行渲染的图像数据，是一种解压过程。</p><h2 id="渲染方式"><a href="#渲染方式" class="headerlink" title="渲染方式"></a>渲染方式</h2><h2 id="几种主流图片格式"><a href="#几种主流图片格式" class="headerlink" title="几种主流图片格式"></a>几种主流图片格式</h2><h4 id="JPEG"><a href="#JPEG" class="headerlink" title="JPEG"></a>JPEG</h4><h4 id="PNG"><a href="#PNG" class="headerlink" title="PNG"></a>PNG</h4><h4 id="GIF"><a href="#GIF" class="headerlink" title="GIF"></a>GIF</h4><h4 id="HEIC"><a href="#HEIC" class="headerlink" title="HEIC"></a>HEIC</h4><h4 id="WebP"><a href="#WebP" class="headerlink" title="WebP"></a>WebP</h4><h2 id="第三方库编解码分析"><a href="#第三方库编解码分析" class="headerlink" title="第三方库编解码分析"></a>第三方库编解码分析</h2><h2 id="底层解码器"><a href="#底层解码器" class="headerlink" title="底层解码器"></a>底层解码器</h2>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;Hi&lt;/p&gt;
-
+        &lt;h5 id=&quot;彩色空间&quot;&gt;&lt;a href=&quot;#彩色空间&quot; class=&quot;headerlink&quot; title=&quot;彩色空间&quot;&gt;&lt;/a&gt;彩色空间&lt;/h5&gt;&lt;h4 id=&quot;像素&quot;&gt;&lt;a href=&quot;#像素&quot; class=&quot;headerlink&quot; title=&quot;像素&quot;&gt;&lt;/a&gt;像素&lt;/h
       
     
     </summary>
     
-      <category term="年度总结" scheme="http://deeer.github.io/categories/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/"/>
+      <category term="计算机组成原理" scheme="http://deeer.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
     
     
-      <category term="年度总结" scheme="http://deeer.github.io/tags/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/"/>
+      <category term="图像" scheme="http://deeer.github.io/tags/%E5%9B%BE%E5%83%8F/"/>
     
   </entry>
   
