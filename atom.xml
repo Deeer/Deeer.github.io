@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deeer.github.io/"/>
-  <updated>2020-09-26T03:13:13.030Z</updated>
+  <updated>2020-09-26T03:18:01.007Z</updated>
   <id>http://deeer.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://deeer.github.io/2020/09/19/%E5%9B%BE%E5%83%8F%E7%9B%B8%E5%85%B3/"/>
     <id>http://deeer.github.io/2020/09/19/图像相关/</id>
     <published>2020-09-19T05:42:33.000Z</published>
-    <updated>2020-09-26T03:13:13.030Z</updated>
+    <updated>2020-09-26T03:18:01.007Z</updated>
     
     <summary type="html">
     
@@ -32,14 +32,7 @@
 &lt;ol&gt;
 &lt;li&gt;显示器分辨率&lt;/li&gt;
 &lt;li&gt;屏幕分辨率&lt;/li&gt;
-&lt;li&gt;图像分辨率&lt;br&gt;其中&lt;strong&gt;显示器分辨率&lt;/strong&gt;是指计算机本身的物理分辨率，这个在产品加工完成之后，就已经确定好的，所以显示器分辨率描述的是自身的像素点数量，是固有不可改变的。&lt;br&gt;&lt;img src=&quot;https://tva1.sinaimg.cn/large/007S8ZIlly1gixgr8cnikj30j5071wfx.jpg&quot; alt&gt;&lt;br&gt;而&lt;strong&gt;屏幕分辨率&lt;/strong&gt;是指，实际显示图像的时候计算机所采用的分辨率，&lt;strong&gt;其中屏幕分辨率必须小于或者等于显示器分辨率。&lt;/strong&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;最后的图像分辨率实际决定的是图像本身的质量。&lt;/strong&gt;&lt;/p&gt;
-&lt;h6 id=&quot;显示区域&quot;&gt;&lt;a href=&quot;#显示区域&quot; class=&quot;headerlink&quot; title=&quot;显示区域&quot;&gt;&lt;/a&gt;显示区域&lt;/h6&gt;&lt;p&gt;那么接下里我们来看看这三者的关系如何。&lt;/p&gt;
-&lt;h4 id=&quot;颜色的表示&quot;&gt;&lt;a href=&quot;#颜色的表示&quot; class=&quot;headerlink&quot; title=&quot;颜色的表示&quot;&gt;&lt;/a&gt;颜色的表示&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;RGBA&lt;/strong&gt;&lt;br&gt;R : Red G : Green B : Blue A : Alpha.&lt;br&gt;计算机中常使用RGB三个值表示颜色，他们描述了四个原色的相对份额，每个值都落在0 ～ 255 的范围内。&lt;br&gt;所以，计算机中一般使用8个比特位(也就是1个字节)来进行表示，那么一个颜色值需要使用3个字节&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;索引颜色&lt;/strong&gt;&lt;br&gt;在早期时代，每个图像都有自己的一个色盘，对于每个像素的点的颜色，图片依据存储在索引表里的index值到色盘中获取对应的颜色即可，这种存储方式在远古时代极大的节省了图片本身的大小。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;li&gt;图像分辨率
     
     </summary>
     
