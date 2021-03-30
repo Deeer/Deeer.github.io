@@ -17,7 +17,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://deeerpictures.oss-cn-beijing.aliyuncs.com/uPic/shsY4J.png">
 <meta property="article:published_time" content="2021-03-29T15:06:14.000Z">
-<meta property="article:modified_time" content="2021-03-30T12:07:05.253Z">
+<meta property="article:modified_time" content="2021-03-30T12:12:00.677Z">
 <meta property="article:author" content="Deeer">
 <meta property="article:tag" content="GCD">
 <meta name="twitter:card" content="summary">
@@ -198,11 +198,8 @@
 </ul>
 <h3 id="Overcommit"><a href="#Overcommit" class="headerlink" title="Overcommit"></a>Overcommit</h3><p>overcommit 参数表示队列在执行blokc时，无论多忙都会新开一个线程</p>
 <blockquote>
-<p>The queue will create a new thread for invoking blocks, regardless of how</p>
+<p>The queue will create a new thread for invoking blocks, regardless of how<br>  busy the computer is.</p>
 </blockquote>
-<ul>
-<li>busy the computer is.</li>
-</ul>
 <p>在<code>root queue</code>我们也可以看到<code>overcommit</code>的身影。值得注意的是全局队列和自定义并发队列是非overcommit的，而主队列和自定义串行队列的都是overcommit的。当我们使用dispatch_async提交任务到串行队列，由于串行队列一般是overcommit的，所以会创建一个新的线程，而并发队列是非overcommit的，所以不会创建新的线程，而是从底层的线程池中获取。</p>
 <p>即便如此，队列在同步执行任务时是不会创建新的线程的，所有的任务都会在当前的线程中执行，且会阻塞线程。dispatch_sync 底层使用信号量来实现串行</p>
 <h3 id="任务提交"><a href="#任务提交" class="headerlink" title="任务提交"></a>任务提交</h3><p>我们提交的block任务，经过GCD底层封装之后，被存储于队列的链表中，符合FIFO原则。<br>只有提交到主队列的任务是在主线程中执行，因为其内部线程是和队列绑定的。主队列的任务由Runloop处理，但是分发到其他队列的任务由底层的线程池处理</p>
